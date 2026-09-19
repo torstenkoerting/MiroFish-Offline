@@ -477,6 +477,64 @@ class SimulationRunner:
         
         return state
     
+    # Runner outcomes that must be mirrored into the persisted simulation state,
+    # otherwise /simulation/list keeps reporting "running" for dead simulations.
+    _TERMINAL_STATUS_MAP = {
+        RunnerStatus.COMPLETED: "completed",
+        RunnerStatus.FAILED: "failed",
+        RunnerStatus.STOPPED: "stopped",
+    }
+
+    @classmethod
+    def _sync_manager_status(cls, simulation_id: str, runner_status: RunnerStatus,
+                             error: Optional[str] = None):
+        """Mirror a terminal runner status into the persisted SimulationState."""
+        mapped = cls._TERMINAL_STATUS_MAP.get(runner_status)
+        if not mapped:
+            return
+
+        try:
+            from .simulation_manager import SimulationManager, SimulationStatus
+            SimulationManager().update_status(
+                simulation_id, SimulationStatus(mapped), error
+            )
+        except Exception as e:
+            logger.error(f"Failed to sync manager status: {simulation_id}, error={e}")
+
+    @classmethod
+    def reconcile_stale_statuses(cls) -> int:
+        """
+        Repair simulations left as "running" after a crash or restart.
+
+        A simulation that died while the server was down never got its terminal
+        status written, so the listing endpoint keeps advertising it as running.
+        """
+        from .simulation_manager import SimulationManager, SimulationStatus
+
+        manager = SimulationManager()
+        repaired = 0
+
+        for state in manager.list_simulations():
+            if state.status != SimulationStatus.RUNNING:
+                continue
+
+            run_state = cls._load_run_state(state.simulation_id)
+            mapped = cls._TERMINAL_STATUS_MAP.get(
+                run_state.runner_status
+            ) if run_state else "failed"
+
+            if not mapped:
+                continue
+
+            error = run_state.error if run_state else "Simulation state lost (server restarted)"
+            manager.update_status(state.simulation_id, SimulationStatus(mapped), error)
+            repaired += 1
+            logger.info(
+                f"Reconciled stale simulation status: {state.simulation_id} running -> {mapped}"
+            )
+
+        return repaired
+
     @classmethod
     def _monitor_simulation(cls, simulation_id: str):
         """Monitor simulation process and parse action logs"""
@@ -543,13 +601,15 @@ class SimulationRunner:
             state.twitter_running = False
             state.reddit_running = False
             cls._save_run_state(state)
-            
+            cls._sync_manager_status(simulation_id, state.runner_status, state.error)
+
         except Exception as e:
             logger.error(f"Monitor thread exception: {simulation_id}, error={str(e)}")
             state.runner_status = RunnerStatus.FAILED
             state.error = str(e)
             cls._save_run_state(state)
-        
+            cls._sync_manager_status(simulation_id, state.runner_status, state.error)
+
         finally:
             # Stop graph memory updater
             if cls._graph_memory_enabled.get(simulation_id, False):

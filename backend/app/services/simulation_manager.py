@@ -461,7 +461,20 @@ class SimulationManager:
     def get_simulation(self, simulation_id: str) -> Optional[SimulationState]:
         """Get simulation state"""
         return self._load_simulation_state(simulation_id)
-    
+
+    def update_status(self, simulation_id: str, status: SimulationStatus,
+                      error: Optional[str] = None) -> bool:
+        """Persist a new lifecycle status for a simulation."""
+        state = self._load_simulation_state(simulation_id)
+        if not state:
+            return False
+
+        state.status = status
+        if error is not None:
+            state.error = error
+        self._save_simulation_state(state)
+        return True
+
     def list_simulations(self, project_id: Optional[str] = None) -> List[SimulationState]:
         """List all simulations"""
         simulations = []
