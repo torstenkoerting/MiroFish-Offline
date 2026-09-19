@@ -21,6 +21,7 @@ from enum import Enum
 from ..config import Config
 from ..utils.llm_client import LLMClient
 from ..utils.logger import get_logger
+from .language_registry import get_instruction
 from .graph_tools import (
     GraphToolsService,
     SearchResult,
@@ -586,7 +587,7 @@ Please output the report outline in JSON format as follows:
 }
 
 Note: sections array must have at least 2 and at most 5 elements!
-IMPORTANT: The entire report outline (title, summary, section titles and descriptions) MUST be in English. Never use Chinese or other languages."""
+IMPORTANT: The entire report outline (title, summary, section titles and descriptions) MUST be written in the target language, regardless of the language of the source material. __LANGUAGE_INSTRUCTION__"""
 
 PLAN_USER_PROMPT_TEMPLATE = """\
 [Prediction Scenario Settings]
@@ -652,13 +653,14 @@ Your task is to:
      > "Certain groups will state: original content..."
    - These quotes are core evidence of simulation predictions
 
-3. [Language Consistency - ALWAYS Write in English]
-   - The entire report MUST be written in English, regardless of source material language
-   - Tool-returned content may contain Chinese, mixed Chinese-English, or other languages
-   - When quoting tool-returned non-English content, ALWAYS translate it to fluent English before writing to report
+3. [Language Consistency - ALWAYS Write in the Target Language]
+   - {language_instruction}
+   - The entire report MUST be written in that target language, regardless of source material language
+   - Tool-returned content may be in a different language than the target language
+   - When quoting tool-returned content in another language, ALWAYS translate it fluently into the target language before writing to report
    - Keep original meaning unchanged during translation, ensure natural expression
    - This rule applies to both body text and quoted content (> format)
-   - NEVER switch to Chinese or any other language mid-report
+   - NEVER switch to another language mid-report
 
 4. [Faithfully Present Prediction Results]
    - Report content must reflect simulation results that represent the future in the simulated world
@@ -854,7 +856,7 @@ Prediction Condition: {simulation_requirement}
 - Concise and direct, don't write lengthy passages
 - Use > format to quote key content
 - Give conclusions first, then explain reasons
-- ALWAYS respond in English, regardless of the language used in source material or report content"""
+- {language_instruction} Always answer in that language, regardless of the language used in source material or report content"""
 
 CHAT_OBSERVATION_SUFFIX = "\n\nPlease answer the question concisely."
 
@@ -889,7 +891,8 @@ class ReportAgent:
         simulation_id: str,
         simulation_requirement: str,
         llm_client: Optional[LLMClient] = None,
-        graph_tools: Optional[GraphToolsService] = None
+        graph_tools: Optional[GraphToolsService] = None,
+        language: Optional[str] = None
     ):
         """
         Initialize Report Agent
@@ -900,10 +903,13 @@ class ReportAgent:
             simulation_requirement: Simulation requirement description
             llm_client: LLM client (optional)
             graph_tools: Graph tools service (optional, requires external GraphStorage injection)
+            language: Report output language code (defaults to Config.REPORT_LANGUAGE)
         """
         self.graph_id = graph_id
         self.simulation_id = simulation_id
         self.simulation_requirement = simulation_requirement
+        self.language = language or Config.REPORT_LANGUAGE
+        self.language_instruction = get_instruction(self.language)
 
         self.llm = llm_client or LLMClient()
         if graph_tools is None:
@@ -1170,7 +1176,9 @@ class ReportAgent:
         if progress_callback:
             progress_callback("planning", 30, "Generating report outline...")
         
-        system_prompt = PLAN_SYSTEM_PROMPT
+        system_prompt = PLAN_SYSTEM_PROMPT.replace(
+            "__LANGUAGE_INSTRUCTION__", self.language_instruction
+        )
         user_prompt = PLAN_USER_PROMPT_TEMPLATE.format(
             simulation_requirement=self.simulation_requirement,
             total_nodes=context.get('graph_statistics', {}).get('total_nodes', 0),
@@ -1265,6 +1273,7 @@ class ReportAgent:
             simulation_requirement=self.simulation_requirement,
             section_title=section.title,
             tools_description=self._get_tools_description(),
+            language_instruction=self.language_instruction,
         )
 
         # Build user prompt - pass maximum 4000 characters for each completed section
@@ -1812,6 +1821,7 @@ class ReportAgent:
             simulation_requirement=self.simulation_requirement,
             report_content=report_content if report_content else "（nonereport）",
             tools_description=self._get_tools_description(),
+            language_instruction=self.language_instruction,
         )
 
         # Buildmessage
