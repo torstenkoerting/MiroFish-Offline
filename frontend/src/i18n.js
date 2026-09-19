@@ -2,6 +2,8 @@ import { createI18n } from 'vue-i18n'
 import languageRegistry from '../../locales/languages.json'
 
 const STORAGE_KEY = 'mirofish-language'
+// German is the house language here; English stays one click away.
+const DEFAULT_LANGUAGE = 'de'
 const FALLBACK = 'en'
 
 // Every locale file next to languages.json becomes an available UI language.
@@ -23,11 +25,12 @@ const detectLanguage = () => {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored && stored in messages) return stored
   } catch {
-    // private mode or blocked storage - fall through to browser preference
+    // private mode or blocked storage - fall through to the default
   }
 
-  const browser = (navigator.language || '').split('-')[0]
-  return browser in messages ? browser : FALLBACK
+  // Deliberately not navigator.language: a browser set to English would
+  // otherwise hide the German interface from a German audience.
+  return DEFAULT_LANGUAGE in messages ? DEFAULT_LANGUAGE : FALLBACK
 }
 
 const i18n = createI18n({
