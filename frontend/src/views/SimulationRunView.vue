@@ -22,8 +22,8 @@
 
       <div class="header-right">
         <div class="workflow-step">
-          <span class="step-num">Step 3/5</span>
-          <span class="step-name">Simulation</span>
+          <span class="step-num">{{ $t('main.stepLabel3') }}</span>
+          <span class="step-name">{{ $t('main.stepName3') }}</span>
         </div>
         <div class="step-divider"></div>
         <span class="status-indicator" :class="statusClass">
@@ -69,11 +69,14 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import GraphPanel from '../components/GraphPanel.vue'
 import Step3Simulation from '../components/Step3Simulation.vue'
 import { getProject, getGraphData } from '../api/graph'
 import { getSimulation, getSimulationConfig, stopSimulation, closeSimulationEnv, getEnvStatus } from '../api/simulation'
 
+
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
@@ -115,9 +118,9 @@ const statusClass = computed(() => {
 })
 
 const statusText = computed(() => {
-  if (currentStatus.value === 'error') return 'Error'
-  if (currentStatus.value === 'completed') return 'Completed'
-  return 'Running'
+  if (currentStatus.value === 'error') return t('common.error')
+  if (currentStatus.value === 'completed') return t('common.completed')
+  return t('common.running')
 })
 
 const isSimulating = computed(() => currentStatus.value === 'processing')
@@ -146,7 +149,7 @@ const toggleMaximize = (target) => {
 
 const handleGoBack = async () => {
   // Close running simulation before returning to Step 2
-  addLog('Returning to Step 2, closing simulation...')
+  addLog(t('log.backToStep2'))
 
   // Stop polling
   stopGraphRefresh()
@@ -156,18 +159,18 @@ const handleGoBack = async () => {
     const envStatusRes = await getEnvStatus({ simulation_id: currentSimulationId.value })
     
     if (envStatusRes.success && envStatusRes.data?.env_alive) {
-      addLog('Closing simulation environment...')
+      addLog(t('log.closingEnv'))
       try {
         await closeSimulationEnv({
           simulation_id: currentSimulationId.value,
           timeout: 10
         })
-        addLog('✓ Simulation environment closed')
+        addLog(t('log.envClosed'))
       } catch (closeErr) {
-        addLog(`Failed to close env, force stopping...`)
+        addLog(t('log.forceStopping'))
         try {
           await stopSimulation({ simulation_id: currentSimulationId.value })
-          addLog('✓ Simulation force stopped')
+          addLog(t('log.forceStopped'))
         } catch (stopErr) {
           addLog(`Force stop failed: ${stopErr.message}`)
         }
@@ -175,10 +178,10 @@ const handleGoBack = async () => {
     } else {
       // Environment not running, check if process needs to be stopped
       if (isSimulating.value) {
-        addLog('Stopping simulation process...')
+        addLog(t('log.stoppingProcess'))
         try {
           await stopSimulation({ simulation_id: currentSimulationId.value })
-          addLog('✓ Simulation stopped')
+          addLog(t('log.simStopped'))
         } catch (err) {
           addLog(`Stop simulation failed: ${err.message}`)
         }
@@ -195,7 +198,7 @@ const handleGoBack = async () => {
 const handleNextStep = () => {
   // Step3Simulation component will handle report generation and routing
   // This method is for backup only
-  addLog('Entering Step 4: Report')
+  addLog(t('log.enterStep4'))
 }
 
 // --- Data Logic ---
@@ -252,7 +255,7 @@ const loadGraph = async (graphId) => {
     if (res.success) {
       graphData.value = res.data
       if (!isSimulating.value) {
-        addLog('Graph data loaded successfully')
+        addLog(t('log.graphLoaded'))
       }
     }
   } catch (err) {
@@ -273,7 +276,7 @@ let graphRefreshTimer = null
 
 const startGraphRefresh = () => {
   if (graphRefreshTimer) return
-  addLog('Graph auto-refresh started (30s)')
+  addLog(t('log.autoRefreshOn'))
   // Refresh immediately, then every 30 seconds
   graphRefreshTimer = setInterval(refreshGraph, 30000)
 }
@@ -282,7 +285,7 @@ const stopGraphRefresh = () => {
   if (graphRefreshTimer) {
     clearInterval(graphRefreshTimer)
     graphRefreshTimer = null
-    addLog('Graph auto-refresh stopped')
+    addLog(t('log.autoRefreshOff'))
   }
 }
 
@@ -295,7 +298,7 @@ watch(isSimulating, (newValue) => {
 }, { immediate: true })
 
 onMounted(() => {
-  addLog('SimulationRunView initialized')
+  addLog(t('log.simRunViewInit'))
 
   // Log maxRounds config (value already retrieved from query param during init)
   if (maxRounds.value) {

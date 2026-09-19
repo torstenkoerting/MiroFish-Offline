@@ -188,7 +188,7 @@ const handleGoBack = () => {
 // --- Data Logic ---
 
 const initProject = async () => {
-  addLog('Project view initialized.')
+  addLog(t('log.projectViewInit'))
   if (currentProjectId.value === 'new') {
     await handleNewProject()
   } else {
@@ -200,7 +200,7 @@ const handleNewProject = async () => {
   const pending = getPendingUpload()
   if (!pending.isPending || pending.files.length === 0) {
     error.value = 'No pending files found.'
-    addLog('Error: No pending files found for new project.')
+    addLog(t('log.noPendingFiles'))
     return
   }
   
@@ -208,7 +208,7 @@ const handleNewProject = async () => {
     loading.value = true
     currentPhase.value = 0
     ontologyProgress.value = { message: 'Uploading and analyzing docs...' }
-    addLog('Starting ontology generation: Uploading files...')
+    addLog(t('log.ontologyUploading'))
     
     const formData = new FormData()
     pending.files.forEach(f => formData.append('files', f))
@@ -282,7 +282,7 @@ const startBuildGraph = async () => {
   try {
     currentPhase.value = 1
     buildProgress.value = { progress: 0, message: 'Starting build...' }
-    addLog('Initiating graph build...')
+    addLog(t('log.graphBuildStarting'))
     
     const res = await buildGraph({ project_id: currentProjectId.value })
     if (res.success) {
@@ -300,7 +300,7 @@ const startBuildGraph = async () => {
 }
 
 const startGraphPolling = () => {
-  addLog('Started polling for graph data...')
+  addLog(t('log.graphPollingStart'))
   fetchGraphData()
   graphPollTimer = setInterval(fetchGraphData, 10000)
 }
@@ -342,7 +342,7 @@ const pollTaskStatus = async (taskId) => {
       buildProgress.value = { progress: task.progress || 0, message: task.message }
       
       if (task.status === 'completed') {
-        addLog('Graph build task completed.')
+        addLog(t('log.graphBuildDone'))
         stopPolling()
         stopGraphPolling() // Stop polling, do final load
         currentPhase.value = 2
@@ -371,7 +371,7 @@ const loadGraph = async (graphId) => {
     const res = await getGraphData(graphId)
     if (res.success) {
       graphData.value = res.data
-      addLog('Graph data loaded successfully.')
+      addLog(t('log.graphLoadedDot'))
     } else {
       addLog(`Failed to load graph data: ${res.error}`)
     }
@@ -384,7 +384,7 @@ const loadGraph = async (graphId) => {
 
 const refreshGraph = () => {
   if (projectData.value?.graph_id) {
-    addLog('Manual graph refresh triggered.')
+    addLog(t('log.graphManualRefresh'))
     loadGraph(projectData.value.graph_id)
   }
 }
@@ -400,7 +400,7 @@ const stopGraphPolling = () => {
   if (graphPollTimer) {
     clearInterval(graphPollTimer)
     graphPollTimer = null
-    addLog('Graph polling stopped.')
+    addLog(t('log.graphPollingStop'))
   }
 }
 

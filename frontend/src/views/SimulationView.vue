@@ -22,8 +22,8 @@
 
       <div class="header-right">
         <div class="workflow-step">
-          <span class="step-num">Step 2/5</span>
-          <span class="step-name">Env Setup</span>
+          <span class="step-num">{{ $t('main.stepLabel2') }}</span>
+          <span class="step-name">{{ $t('main.stepName2') }}</span>
         </div>
         <div class="step-divider"></div>
         <span class="status-indicator" :class="statusClass">
@@ -66,11 +66,14 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import GraphPanel from '../components/GraphPanel.vue'
 import Step2EnvSetup from '../components/Step2EnvSetup.vue'
 import { getProject, getGraphData } from '../api/graph'
 import { getSimulation, stopSimulation, getEnvStatus, closeSimulationEnv } from '../api/simulation'
 
+
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
@@ -109,9 +112,9 @@ const statusClass = computed(() => {
 })
 
 const statusText = computed(() => {
-  if (currentStatus.value === 'error') return 'Error'
-  if (currentStatus.value === 'completed') return 'Ready'
-  return 'Preparing'
+  if (currentStatus.value === 'error') return t('common.error')
+  if (currentStatus.value === 'completed') return t('common.ready')
+  return t('common.preparing')
 })
 
 // --- Helpers ---
@@ -146,13 +149,13 @@ const handleGoBack = () => {
 }
 
 const handleNextStep = (params = {}) => {
-  addLog('Entering Step 3: Simulation')
+  addLog(t('log.enterStep3'))
 
   // Log simulation rounds configuration
   if (params.maxRounds) {
     addLog(`Custom simulation rounds: ${params.maxRounds}`)
   } else {
-    addLog('Using auto-configured simulation rounds')
+    addLog(t('log.autoRounds'))
   }
 
   // Build route parameters
@@ -184,7 +187,7 @@ const checkAndStopRunningSimulation = async () => {
     const envStatusRes = await getEnvStatus({ simulation_id: currentSimulationId.value })
 
     if (envStatusRes.success && envStatusRes.data?.env_alive) {
-      addLog('Simulation environment running, shutting down...')
+      addLog(t('log.envRunningShutdown'))
 
       // Try graceful shutdown
       try {
@@ -194,7 +197,7 @@ const checkAndStopRunningSimulation = async () => {
         })
 
         if (closeRes.success) {
-          addLog('✓ Simulation environment closed')
+          addLog(t('log.envClosed'))
         } else {
           addLog(`Failed to close simulation env: ${closeRes.error || 'Unknown error'}`)
           // If graceful shutdown fails, try force stop
@@ -209,7 +212,7 @@ const checkAndStopRunningSimulation = async () => {
       // Environment not running, but process may still exist, check simulation status
       const simRes = await getSimulation(currentSimulationId.value)
       if (simRes.success && simRes.data?.status === 'running') {
-        addLog('Simulation is running, stopping...')
+        addLog(t('log.simRunningStop'))
         await forceStopSimulation()
       }
     }
@@ -226,7 +229,7 @@ const forceStopSimulation = async () => {
   try {
     const stopRes = await stopSimulation({ simulation_id: currentSimulationId.value })
     if (stopRes.success) {
-      addLog('✓ Simulation force stopped')
+      addLog(t('log.forceStopped'))
     } else {
       addLog(`Failed to force stop simulation: ${stopRes.error || 'Unknown error'}`)
     }
@@ -271,7 +274,7 @@ const loadGraph = async (graphId) => {
     const res = await getGraphData(graphId)
     if (res.success) {
       graphData.value = res.data
-      addLog('Graph data loaded successfully')
+      addLog(t('log.graphLoaded'))
     }
   } catch (err) {
     addLog(`Graph load failed: ${err.message}`)
@@ -287,7 +290,7 @@ const refreshGraph = () => {
 }
 
 onMounted(async () => {
-  addLog('SimulationView initialized')
+  addLog(t('log.simViewInit'))
 
   // Check and stop running simulation (when user returns from Step 3)
   await checkAndStopRunningSimulation()
