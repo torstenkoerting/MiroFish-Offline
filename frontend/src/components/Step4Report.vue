@@ -391,9 +391,12 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted, nextTick, h, reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { getAgentLog, getConsoleLog } from '../api/report'
 
+
+const { t } = useI18n()
 const router = useRouter()
 
 const props = defineProps({
@@ -2173,7 +2176,7 @@ const stopPolling = () => {
 // Lifecycle
 onMounted(() => {
   if (props.reportId) {
-    addLog(`Report Agent initialized: ${props.reportId}`)
+    addLog(t('log.s4AgentInit', { p1: props.reportId }))
     startPolling()
   }
 })

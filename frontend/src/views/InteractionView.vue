@@ -30,6 +30,7 @@
           <span class="dot"></span>
           {{ statusText }}
         </span>
+        <LanguageSwitcher variant="light" />
       </div>
     </header>
 
@@ -65,6 +66,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import LanguageSwitcher from '../components/LanguageSwitcher.vue'
 import GraphPanel from '../components/GraphPanel.vue'
 import Step5Interaction from '../components/Step5Interaction.vue'
 import { getProject, getGraphData } from '../api/graph'
@@ -143,7 +145,7 @@ const toggleMaximize = (target) => {
 // --- Data Logic ---
 const loadReportData = async () => {
   try {
-    addLog(`Loading report data: ${currentReportId.value}`)
+    addLog(t('log.loadingReport', { p1: currentReportId.value }))
     
     // Get report info to retrieve simulation_id
     const reportRes = await getReport(currentReportId.value)
@@ -162,7 +164,7 @@ const loadReportData = async () => {
             const projRes = await getProject(simData.project_id)
             if (projRes.success && projRes.data) {
               projectData.value = projRes.data
-              addLog(`Project loaded: ${projRes.data.project_id}`)
+              addLog(t('log.projectLoadedId', { p1: projRes.data.project_id }))
               
               // Get graph data
               if (projRes.data.graph_id) {
@@ -173,10 +175,10 @@ const loadReportData = async () => {
         }
       }
     } else {
-      addLog(`Failed to load report: ${reportRes.error || 'Unknown error'}`)
+      addLog(t('log.reportLoadFailed', { p1: reportRes.error || 'Unknown error' }))
     }
   } catch (err) {
-    addLog(`Load error: ${err.message}`)
+    addLog(t('log.loadError', { p1: err.message }))
   }
 }
 
@@ -190,7 +192,7 @@ const loadGraph = async (graphId) => {
       addLog(t('log.graphLoaded'))
     }
   } catch (err) {
-    addLog(`Graph load failed: ${err.message}`)
+    addLog(t('log.graphLoadFailed', { p1: err.message }))
   } finally {
     graphLoading.value = false
   }

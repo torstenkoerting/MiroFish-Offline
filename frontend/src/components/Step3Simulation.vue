@@ -404,7 +404,7 @@ const doStartSimulation = async () => {
 
     if (props.maxRounds) {
       params.max_rounds = props.maxRounds
-      addLog(`Set max simulation rounds: ${props.maxRounds}`)
+      addLog(t('log.s3MaxRounds', { p1: props.maxRounds }))
     }
 
     addLog(t('log.s3GraphUpdateOn'))
@@ -416,7 +416,7 @@ const doStartSimulation = async () => {
         addLog(t('log.s3Restarted'))
       }
       addLog(t('log.s3EngineStarted'))
-      addLog(`  ├─ PID: ${res.data.process_pid || '-'}`)
+      addLog(t('log.s3Pid', { p1: res.data.process_pid || '-' }))
 
       phase.value = 1
       runStatus.value = res.data
@@ -425,12 +425,12 @@ const doStartSimulation = async () => {
       startDetailPolling()
     } else {
       startError.value = res.error || 'Start failed'
-      addLog(`✗ Start failed: ${res.error || 'Unknown error'}`)
+      addLog(t('log.s3StartFailed', { p1: res.error || 'Unknown error' }))
       emit('update-status', 'error')
     }
   } catch (err) {
     startError.value = err.message
-    addLog(`✗ Start exception: ${err.message}`)
+    addLog(t('log.s3StartException', { p1: err.message }))
     emit('update-status', 'error')
   } finally {
     isStarting.value = false
@@ -453,10 +453,10 @@ const handleStopSimulation = async () => {
       stopPolling()
       emit('update-status', 'completed')
     } else {
-      addLog(`Stop failed: ${res.error || 'Unknown error'}`)
+      addLog(t('log.s3StopFailed', { p1: res.error || 'Unknown error' }))
     }
   } catch (err) {
-    addLog(`Stop exception: ${err.message}`)
+    addLog(t('log.s3StopException', { p1: err.message }))
   } finally {
     isStopping.value = false
   }
@@ -502,12 +502,12 @@ const fetchRunStatus = async () => {
 
       // Detect round changes for each platform and output logs
       if (data.twitter_current_round > prevTwitterRound.value) {
-        addLog(`[Info Plaza] R${data.twitter_current_round}/${data.total_rounds} | T:${data.twitter_simulated_hours || 0}h | A:${data.twitter_actions_count}`)
+        addLog(t('log.s3PlazaProgress', { p1: data.twitter_current_round, p2: data.total_rounds, p3: data.twitter_simulated_hours || 0, p4: data.twitter_actions_count }))
         prevTwitterRound.value = data.twitter_current_round
       }
 
       if (data.reddit_current_round > prevRedditRound.value) {
-        addLog(`[Topic Community] R${data.reddit_current_round}/${data.total_rounds} | T:${data.reddit_simulated_hours || 0}h | A:${data.reddit_actions_count}`)
+        addLog(t('log.s3CommunityProgress', { p1: data.reddit_current_round, p2: data.total_rounds, p3: data.reddit_simulated_hours || 0, p4: data.reddit_actions_count }))
         prevRedditRound.value = data.reddit_current_round
       }
 
@@ -663,16 +663,16 @@ const handleNextStep = async () => {
 
     if (res.success && res.data) {
       const reportId = res.data.report_id
-      addLog(`✓ Report generation task started: ${reportId}`)
+      addLog(t('log.s3ReportTaskStarted', { p1: reportId }))
 
       // Navigate to report page
       router.push({ name: 'Report', params: { reportId } })
     } else {
-      addLog(`✗ Failed to start report generation: ${res.error || 'Unknown error'}`)
+      addLog(t('log.s3ReportStartFailed', { p1: res.error || 'Unknown error' }))
       isGeneratingReport.value = false
     }
   } catch (err) {
-    addLog(`✗ Report generation exception: ${err.message}`)
+    addLog(t('log.s3ReportException', { p1: err.message }))
     isGeneratingReport.value = false
   }
 }

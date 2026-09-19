@@ -30,6 +30,7 @@
           <span class="dot"></span>
           {{ statusText }}
         </span>
+        <LanguageSwitcher variant="light" />
       </div>
     </header>
 
@@ -67,6 +68,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import LanguageSwitcher from '../components/LanguageSwitcher.vue'
 import GraphPanel from '../components/GraphPanel.vue'
 import Step2EnvSetup from '../components/Step2EnvSetup.vue'
 import { getProject, getGraphData } from '../api/graph'
@@ -153,7 +155,7 @@ const handleNextStep = (params = {}) => {
 
   // Log simulation rounds configuration
   if (params.maxRounds) {
-    addLog(`Custom simulation rounds: ${params.maxRounds}`)
+    addLog(t('log.customRounds', { p1: params.maxRounds }))
   } else {
     addLog(t('log.autoRounds'))
   }
@@ -199,12 +201,12 @@ const checkAndStopRunningSimulation = async () => {
         if (closeRes.success) {
           addLog(t('log.envClosed'))
         } else {
-          addLog(`Failed to close simulation env: ${closeRes.error || 'Unknown error'}`)
+          addLog(t('log.closeEnvFailed', { p1: closeRes.error || 'Unknown error' }))
           // If graceful shutdown fails, try force stop
           await forceStopSimulation()
         }
       } catch (closeErr) {
-        addLog(`Close env exception: ${closeErr.message}`)
+        addLog(t('log.closeEnvException', { p1: closeErr.message }))
         // If graceful shutdown fails, try force stop
         await forceStopSimulation()
       }
@@ -231,16 +233,16 @@ const forceStopSimulation = async () => {
     if (stopRes.success) {
       addLog(t('log.forceStopped'))
     } else {
-      addLog(`Failed to force stop simulation: ${stopRes.error || 'Unknown error'}`)
+      addLog(t('log.forceStopSimFailed', { p1: stopRes.error || 'Unknown error' }))
     }
   } catch (err) {
-    addLog(`Force stop exception: ${err.message}`)
+    addLog(t('log.forceStopException', { p1: err.message }))
   }
 }
 
 const loadSimulationData = async () => {
   try {
-    addLog(`Loading simulation data: ${currentSimulationId.value}`)
+    addLog(t('log.loadingSimData', { p1: currentSimulationId.value }))
 
     // Get simulation info
     const simRes = await getSimulation(currentSimulationId.value)
@@ -252,7 +254,7 @@ const loadSimulationData = async () => {
         const projRes = await getProject(simData.project_id)
         if (projRes.success && projRes.data) {
           projectData.value = projRes.data
-          addLog(`Project loaded: ${projRes.data.project_id}`)
+          addLog(t('log.projectLoadedId', { p1: projRes.data.project_id }))
 
           // Get graph data
           if (projRes.data.graph_id) {
@@ -261,10 +263,10 @@ const loadSimulationData = async () => {
         }
       }
     } else {
-      addLog(`Failed to load simulation data: ${simRes.error || 'Unknown error'}`)
+      addLog(t('log.simDataFailed', { p1: simRes.error || 'Unknown error' }))
     }
   } catch (err) {
-    addLog(`Load error: ${err.message}`)
+    addLog(t('log.loadError', { p1: err.message }))
   }
 }
 
@@ -277,7 +279,7 @@ const loadGraph = async (graphId) => {
       addLog(t('log.graphLoaded'))
     }
   } catch (err) {
-    addLog(`Graph load failed: ${err.message}`)
+    addLog(t('log.graphLoadFailed', { p1: err.message }))
   } finally {
     graphLoading.value = false
   }
