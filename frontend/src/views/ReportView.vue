@@ -22,14 +22,15 @@
 
       <div class="header-right">
         <div class="workflow-step">
-          <span class="step-num">Step 4/5</span>
-          <span class="step-name">Report</span>
+          <span class="step-num">{{ $t('main.stepLabel4') }}</span>
+          <span class="step-name">{{ $t('main.stepName4') }}</span>
         </div>
         <div class="step-divider"></div>
         <span class="status-indicator" :class="statusClass">
           <span class="dot"></span>
           {{ statusText }}
         </span>
+        <LanguageSwitcher variant="light" />
       </div>
     </header>
 
@@ -64,12 +65,16 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import LanguageSwitcher from '../components/LanguageSwitcher.vue'
 import GraphPanel from '../components/GraphPanel.vue'
 import Step4Report from '../components/Step4Report.vue'
 import { getProject, getGraphData } from '../api/graph'
 import { getSimulation } from '../api/simulation'
 import { getReport } from '../api/report'
 
+
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
@@ -109,9 +114,9 @@ const statusClass = computed(() => {
 })
 
 const statusText = computed(() => {
-  if (currentStatus.value === 'error') return 'Error'
-  if (currentStatus.value === 'completed') return 'Completed'
-  return 'Generating'
+  if (currentStatus.value === 'error') return t('common.error')
+  if (currentStatus.value === 'completed') return t('common.completed')
+  return t('common.processing')
 })
 
 // --- Helpers ---
@@ -139,7 +144,7 @@ const toggleMaximize = (target) => {
 // --- Data Logic ---
 const loadReportData = async () => {
   try {
-    addLog(`Loading report data: ${currentReportId.value}`)
+    addLog(t('log.loadingReport', { p1: currentReportId.value }))
     
     // Get report info to retrieve simulation_id
     const reportRes = await getReport(currentReportId.value)
@@ -158,7 +163,7 @@ const loadReportData = async () => {
             const projRes = await getProject(simData.project_id)
             if (projRes.success && projRes.data) {
               projectData.value = projRes.data
-              addLog(`Project loaded: ${projRes.data.project_id}`)
+              addLog(t('log.projectLoadedId', { p1: projRes.data.project_id }))
               
               // Get graph data
               if (projRes.data.graph_id) {
@@ -169,10 +174,10 @@ const loadReportData = async () => {
         }
       }
     } else {
-      addLog(`Failed to load report: ${reportRes.error || 'Unknown error'}`)
+      addLog(t('log.reportLoadFailed', { p1: reportRes.error || 'Unknown error' }))
     }
   } catch (err) {
-    addLog(`Load error: ${err.message}`)
+    addLog(t('log.loadError', { p1: err.message }))
   }
 }
 
@@ -183,10 +188,10 @@ const loadGraph = async (graphId) => {
     const res = await getGraphData(graphId)
     if (res.success) {
       graphData.value = res.data
-      addLog('Graph data loaded successfully')
+      addLog(t('log.graphLoaded'))
     }
   } catch (err) {
-    addLog(`Graph load failed: ${err.message}`)
+    addLog(t('log.graphLoadFailed', { p1: err.message }))
   } finally {
     graphLoading.value = false
   }
@@ -207,7 +212,7 @@ watch(() => route.params.reportId, (newId) => {
 }, { immediate: true })
 
 onMounted(() => {
-  addLog('ReportView initialized')
+  addLog(t('log.reportViewInit'))
   loadReportData()
 })
 </script>

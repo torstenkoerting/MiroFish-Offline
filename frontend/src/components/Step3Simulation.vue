@@ -9,7 +9,7 @@
             <svg class="platform-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
             </svg>
-            <span class="platform-name">Info Plaza</span>
+            <span class="platform-name">{{ $t('step3.infoPlaza') }}</span>
             <span v-if="runStatus.twitter_completed" class="status-badge">
               <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
                 <polyline points="20 6 9 17 4 12"></polyline>
@@ -18,21 +18,21 @@
           </div>
           <div class="platform-stats">
             <span class="stat">
-              <span class="stat-label">ROUND</span>
+              <span class="stat-label">{{ $t('step3.labelRound') }}</span>
               <span class="stat-value mono">{{ runStatus.twitter_current_round || 0 }}<span class="stat-total">/{{ runStatus.total_rounds || maxRounds || '-' }}</span></span>
             </span>
             <span class="stat">
-              <span class="stat-label">Elapsed Time</span>
+              <span class="stat-label">{{ $t('step3.elapsedTime') }}</span>
               <span class="stat-value mono">{{ twitterElapsedTime }}</span>
             </span>
             <span class="stat">
-              <span class="stat-label">ACTS</span>
+              <span class="stat-label">{{ $t('step3.labelActs') }}</span>
               <span class="stat-value mono">{{ runStatus.twitter_actions_count || 0 }}</span>
             </span>
           </div>
           <!-- Available Actions Tooltip -->
           <div class="actions-tooltip">
-            <div class="tooltip-title">Available Actions</div>
+            <div class="tooltip-title">{{ $t('step3.availableActions') }}</div>
             <div class="tooltip-actions">
               <span class="tooltip-action">POST</span>
               <span class="tooltip-action">LIKE</span>
@@ -50,7 +50,7 @@
             <svg class="platform-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
             </svg>
-            <span class="platform-name">Topic Community</span>
+            <span class="platform-name">{{ $t('step3.topicCommunity') }}</span>
             <span v-if="runStatus.reddit_completed" class="status-badge">
               <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
                 <polyline points="20 6 9 17 4 12"></polyline>
@@ -59,21 +59,21 @@
           </div>
           <div class="platform-stats">
             <span class="stat">
-              <span class="stat-label">ROUND</span>
+              <span class="stat-label">{{ $t('step3.labelRound') }}</span>
               <span class="stat-value mono">{{ runStatus.reddit_current_round || 0 }}<span class="stat-total">/{{ runStatus.total_rounds || maxRounds || '-' }}</span></span>
             </span>
             <span class="stat">
-              <span class="stat-label">Elapsed Time</span>
+              <span class="stat-label">{{ $t('step3.elapsedTime') }}</span>
               <span class="stat-value mono">{{ redditElapsedTime }}</span>
             </span>
             <span class="stat">
-              <span class="stat-label">ACTS</span>
+              <span class="stat-label">{{ $t('step3.labelActs') }}</span>
               <span class="stat-value mono">{{ runStatus.reddit_actions_count || 0 }}</span>
             </span>
           </div>
           <!-- Available Actions Tooltip -->
           <div class="actions-tooltip">
-            <div class="tooltip-title">Available Actions</div>
+            <div class="tooltip-title">{{ $t('step3.availableActions') }}</div>
             <div class="tooltip-actions">
               <span class="tooltip-action">POST</span>
               <span class="tooltip-action">COMMENT</span>
@@ -108,7 +108,7 @@
       <!-- Timeline Header -->
       <div class="timeline-header" v-if="allActions.length > 0">
         <div class="timeline-stats">
-          <span class="total-count">TOTAL EVENTS: <span class="mono">{{ allActions.length }}</span></span>
+          <span class="total-count">{{ $t('step3.totalEvents') }} <span class="mono">{{ allActions.length }}</span></span>
           <span class="platform-breakdown">
             <span class="breakdown-item twitter">
               <svg class="mini-icon" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
@@ -215,7 +215,7 @@
                 <template v-if="action.action_type === 'SEARCH_POSTS'">
                   <div class="search-info">
                     <svg class="icon-small" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    <span class="search-label">Search Query:</span>
+                    <span class="search-label">{{ $t('step3.searchQuery') }}</span>
                     <span class="search-query">"{{ action.action_args?.query || '' }}"</span>
                   </div>
                 </template>
@@ -244,7 +244,7 @@
                 <template v-if="action.action_type === 'DO_NOTHING'">
                   <div class="idle-info">
                     <svg class="icon-small" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                    <span class="idle-label">Action Skipped</span>
+                    <span class="idle-label">{{ $t('step3.actionSkipped') }}</span>
                   </div>
                 </template>
 
@@ -264,7 +264,7 @@
 
         <div v-if="allActions.length === 0" class="waiting-state">
           <div class="pulse-ring"></div>
-          <span>Waiting for agent actions...</span>
+          <span>{{ $t('step3.waitingForActions') }}</span>
         </div>
       </div>
     </div>
@@ -272,7 +272,7 @@
     <!-- Bottom Info / Logs -->
     <div class="system-logs">
       <div class="log-header">
-        <span class="log-title">SIMULATION MONITOR</span>
+        <span class="log-title">{{ $t('step3.simulationMonitor') }}</span>
         <span class="log-id">{{ simulationId || 'NO_SIMULATION' }}</span>
       </div>
       <div class="log-content" ref="logContent">
@@ -287,6 +287,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { 
   startSimulation, 
@@ -296,6 +297,8 @@ import {
 } from '../api/simulation'
 import { generateReport } from '../api/report'
 
+
+const { t } = useI18n()
 const props = defineProps({
   simulationId: String,
   maxRounds: Number, // Max rounds passed from Step2
@@ -379,7 +382,7 @@ const resetAllState = () => {
 // Start simulation
 const doStartSimulation = async () => {
   if (!props.simulationId) {
-    addLog('Error: Missing simulationId')
+    addLog(t('log.s3MissingSimId'))
     return
   }
 
@@ -388,7 +391,7 @@ const doStartSimulation = async () => {
 
   isStarting.value = true
   startError.value = null
-  addLog('Starting dual-platform parallel simulation...')
+  addLog(t('log.s3StartDual'))
   emit('update-status', 'processing')
 
   try {
@@ -401,19 +404,19 @@ const doStartSimulation = async () => {
 
     if (props.maxRounds) {
       params.max_rounds = props.maxRounds
-      addLog(`Set max simulation rounds: ${props.maxRounds}`)
+      addLog(t('log.s3MaxRounds', { p1: props.maxRounds }))
     }
 
-    addLog('Dynamic graph update mode enabled')
+    addLog(t('log.s3GraphUpdateOn'))
 
     const res = await startSimulation(params)
 
     if (res.success && res.data) {
       if (res.data.force_restarted) {
-        addLog('✓ Cleaned old simulation logs and restarted simulation')
+        addLog(t('log.s3Restarted'))
       }
-      addLog('✓ Simulation engine started successfully')
-      addLog(`  ├─ PID: ${res.data.process_pid || '-'}`)
+      addLog(t('log.s3EngineStarted'))
+      addLog(t('log.s3Pid', { p1: res.data.process_pid || '-' }))
 
       phase.value = 1
       runStatus.value = res.data
@@ -422,12 +425,12 @@ const doStartSimulation = async () => {
       startDetailPolling()
     } else {
       startError.value = res.error || 'Start failed'
-      addLog(`✗ Start failed: ${res.error || 'Unknown error'}`)
+      addLog(t('log.s3StartFailed', { p1: res.error || 'Unknown error' }))
       emit('update-status', 'error')
     }
   } catch (err) {
     startError.value = err.message
-    addLog(`✗ Start exception: ${err.message}`)
+    addLog(t('log.s3StartException', { p1: err.message }))
     emit('update-status', 'error')
   } finally {
     isStarting.value = false
@@ -439,21 +442,21 @@ const handleStopSimulation = async () => {
   if (!props.simulationId) return
 
   isStopping.value = true
-  addLog('Stopping simulation...')
+  addLog(t('log.s3Stopping'))
 
   try {
     const res = await stopSimulation({ simulation_id: props.simulationId })
 
     if (res.success) {
-      addLog('✓ Simulation stopped')
+      addLog(t('log.s3Stopped'))
       phase.value = 2
       stopPolling()
       emit('update-status', 'completed')
     } else {
-      addLog(`Stop failed: ${res.error || 'Unknown error'}`)
+      addLog(t('log.s3StopFailed', { p1: res.error || 'Unknown error' }))
     }
   } catch (err) {
-    addLog(`Stop exception: ${err.message}`)
+    addLog(t('log.s3StopException', { p1: err.message }))
   } finally {
     isStopping.value = false
   }
@@ -499,12 +502,12 @@ const fetchRunStatus = async () => {
 
       // Detect round changes for each platform and output logs
       if (data.twitter_current_round > prevTwitterRound.value) {
-        addLog(`[Info Plaza] R${data.twitter_current_round}/${data.total_rounds} | T:${data.twitter_simulated_hours || 0}h | A:${data.twitter_actions_count}`)
+        addLog(t('log.s3PlazaProgress', { p1: data.twitter_current_round, p2: data.total_rounds, p3: data.twitter_simulated_hours || 0, p4: data.twitter_actions_count }))
         prevTwitterRound.value = data.twitter_current_round
       }
 
       if (data.reddit_current_round > prevRedditRound.value) {
-        addLog(`[Topic Community] R${data.reddit_current_round}/${data.total_rounds} | T:${data.reddit_simulated_hours || 0}h | A:${data.reddit_actions_count}`)
+        addLog(t('log.s3CommunityProgress', { p1: data.reddit_current_round, p2: data.total_rounds, p3: data.reddit_simulated_hours || 0, p4: data.reddit_actions_count }))
         prevRedditRound.value = data.reddit_current_round
       }
 
@@ -517,9 +520,9 @@ const fetchRunStatus = async () => {
 
       if (isCompleted || platformsCompleted) {
         if (platformsCompleted && !isCompleted) {
-          addLog('✓ Detected all platform simulations have ended')
+          addLog(t('log.s3AllEnded'))
         }
-        addLog('✓ Simulation completed')
+        addLog(t('log.s3Completed'))
         phase.value = 2
         stopPolling()
         emit('update-status', 'completed')
@@ -640,17 +643,17 @@ const formatActionTime = (timestamp) => {
 
 const handleNextStep = async () => {
   if (!props.simulationId) {
-    addLog('Error: Missing simulationId')
+    addLog(t('log.s3MissingSimId'))
     return
   }
 
   if (isGeneratingReport.value) {
-    addLog('Report generation request sent, please wait...')
+    addLog(t('log.s3ReportRequested'))
     return
   }
 
   isGeneratingReport.value = true
-  addLog('Starting report generation...')
+  addLog(t('log.s3ReportStarting'))
 
   try {
     const res = await generateReport({
@@ -660,16 +663,16 @@ const handleNextStep = async () => {
 
     if (res.success && res.data) {
       const reportId = res.data.report_id
-      addLog(`✓ Report generation task started: ${reportId}`)
+      addLog(t('log.s3ReportTaskStarted', { p1: reportId }))
 
       // Navigate to report page
       router.push({ name: 'Report', params: { reportId } })
     } else {
-      addLog(`✗ Failed to start report generation: ${res.error || 'Unknown error'}`)
+      addLog(t('log.s3ReportStartFailed', { p1: res.error || 'Unknown error' }))
       isGeneratingReport.value = false
     }
   } catch (err) {
-    addLog(`✗ Report generation exception: ${err.message}`)
+    addLog(t('log.s3ReportException', { p1: err.message }))
     isGeneratingReport.value = false
   }
 }
@@ -685,7 +688,7 @@ watch(() => props.systemLogs?.length, () => {
 })
 
 onMounted(() => {
-  addLog('Step3 Simulation initialization')
+  addLog(t('log.s3Init'))
   if (props.simulationId) {
     doStartSimulation()
   }

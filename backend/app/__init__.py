@@ -60,6 +60,13 @@ def create_app(config_class=Config):
     if should_log_startup:
         logger.info("Simulation process cleanup function registered")
 
+    try:
+        repaired = SimulationRunner.reconcile_stale_statuses()
+        if should_log_startup and repaired:
+            logger.info("Reconciled %d stale simulation status(es)", repaired)
+    except Exception as e:
+        logger.error("Failed to reconcile stale simulation statuses: %s", e)
+
     # Request logging middleware
     @app.before_request
     def log_request():

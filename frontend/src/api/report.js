@@ -1,11 +1,15 @@
 import service, { requestWithRetry } from './index'
+import { currentLanguage } from '../i18n'
+
+/** Reports follow the selected UI language unless the caller overrides it. */
+const withLanguage = (data) => ({ language: currentLanguage(), ...data })
 
 /**
  * Start report generation
- * @param {Object} data - { simulation_id, force_regenerate? }
+ * @param {Object} data - { simulation_id, force_regenerate?, language? }
  */
 export const generateReport = (data) => {
-  return requestWithRetry(() => service.post('/api/report/generate', data), 3, 1000)
+  return requestWithRetry(() => service.post('/api/report/generate', withLanguage(data)), 3, 1000)
 }
 
 /**
@@ -47,5 +51,5 @@ export const getReport = (reportId) => {
  * @param {Object} data - { simulation_id, message, chat_history? }
  */
 export const chatWithReport = (data) => {
-  return requestWithRetry(() => service.post('/api/report/chat', data), 3, 1000)
+  return requestWithRetry(() => service.post('/api/report/chat', withLanguage(data)), 3, 1000)
 }

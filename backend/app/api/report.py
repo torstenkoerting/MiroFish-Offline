@@ -15,6 +15,7 @@ from ..services.simulation_manager import SimulationManager
 from ..models.project import ProjectManager
 from ..models.task import TaskManager, TaskStatus
 from ..services.graph_tools import GraphToolsService
+from ..services.language_registry import list_languages
 from ..utils.logger import get_logger
 
 logger = get_logger('mirofish.api.report')
@@ -31,6 +32,7 @@ def generate_report():
             return jsonify({"success": False, "error": "Please provide simulation_id"}), 400
 
         force_regenerate = data.get('force_regenerate', False)
+        language = data.get('language') or Config.REPORT_LANGUAGE
         manager = SimulationManager()
         state = manager.get_simulation(simulation_id)
         if not state:
@@ -82,7 +84,8 @@ def generate_report():
                     graph_id=graph_id,
                     simulation_id=simulation_id,
                     simulation_requirement=simulation_requirement,
-                    graph_tools=graph_tools
+                    graph_tools=graph_tools,
+                    language=language
                 )
                 def progress_callback(stage, progress, message):
                     task_manager.update_task(task_id, progress=progress, message=f"[{stage}] {message}")
@@ -221,6 +224,22 @@ def delete_report(report_id: str):
 
 # ============== Report Agent Chat Interface ==============
 
+@report_bp.route('/languages', methods=['GET'])
+def get_report_languages():
+    """Languages available for report output, plus the configured default."""
+    try:
+        return jsonify({"success": True, "data": {
+            "languages": {
+                code: {"label": entry.get("label", code)}
+                for code, entry in list_languages().items()
+            },
+            "default": Config.REPORT_LANGUAGE
+        }})
+    except Exception as e:
+        logger.error(f"Failed to list report languages: {str(e)}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
 @report_bp.route('/chat', methods=['POST'])
 def chat_with_report_agent():
     try:
@@ -258,7 +277,8 @@ def chat_with_report_agent():
             graph_id=graph_id,
             simulation_id=simulation_id,
             simulation_requirement=simulation_requirement,
-            graph_tools=graph_tools
+            graph_tools=graph_tools,
+            language=data.get('language') or Config.REPORT_LANGUAGE
         )
 
         result = agent.chat(message=message, chat_history=chat_history)
