@@ -9,16 +9,23 @@ import warnings
 # Must be set before all other imports
 warnings.filterwarnings("ignore", message=".*resource_tracker.*")
 
-from flask import Flask, request
+from flask import Flask, abort, request, send_from_directory
 from flask_cors import CORS
 
 from .config import Config
 from .utils.logger import setup_logger, get_logger
 
 
+# The production image ships the compiled frontend here; in development the
+# directory is absent and Vite serves the UI instead.
+FRONTEND_DIST = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..', '..', 'frontend', 'dist')
+)
+
+
 def create_app(config_class=Config):
     """Flask application factory function"""
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder=None)
     app.config.from_object(config_class)
 
     # Configure JSON encoding: ensure Chinese displays directly (not as \uXXXX)
@@ -91,6 +98,24 @@ def create_app(config_class=Config):
     @app.route('/health')
     def health():
         return {'status': 'ok', 'service': 'MiroFish-Offline Backend'}
+
+    # Serve the compiled frontend. Vue Router uses history mode, so unknown
+    # paths have to fall back to index.html instead of returning 404.
+    if os.path.isdir(FRONTEND_DIST):
+        @app.route('/', defaults={'path': ''})
+        @app.route('/<path:path>')
+        def serve_frontend(path):
+            if path.startswith('api/'):
+                abort(404)
+            candidate = os.path.join(FRONTEND_DIST, path)
+            if path and os.path.isfile(candidate):
+                return send_from_directory(FRONTEND_DIST, path)
+            return send_from_directory(FRONTEND_DIST, 'index.html')
+
+        if should_log_startup:
+            logger.info("Serving compiled frontend from %s", FRONTEND_DIST)
+    elif should_log_startup:
+        logger.info("No compiled frontend found - expecting the Vite dev server")
 
     if should_log_startup:
         logger.info("MiroFish-Offline Backend startup complete")

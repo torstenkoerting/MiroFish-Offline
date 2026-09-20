@@ -1,29 +1,41 @@
+# ---- Stage 1: build the frontend once ----
+FROM node:22-slim AS frontend
+
+WORKDIR /build
+COPY frontend/package.json frontend/package-lock.json ./frontend/
+RUN npm ci --prefix frontend
+
+# vite.config.js reads ../locales via import.meta.glob, so it must be present
+COPY frontend ./frontend
+COPY locales ./locales
+RUN npm run build --prefix frontend
+
+
+# ---- Stage 2: runtime, Python only ----
+# Not -slim: some dependencies (psutil, langdetect) compile from source.
 FROM python:3.11
 
-# 安装 Node.js （满足 >=18）及必要工具
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends nodejs npm \
-  && rm -rf /var/lib/apt/lists/*
-
-# 从 uv 官方镜像复制 uv
 COPY --from=ghcr.io/astral-sh/uv:0.9.26 /uv /uvx /bin/
 
 WORKDIR /app
 
-# 先复制依赖描述文件以利用缓存
-COPY package.json package-lock.json ./
-COPY frontend/package.json frontend/package-lock.json ./frontend/
 COPY backend/pyproject.toml backend/uv.lock ./backend/
+RUN cd backend && uv sync
 
-# 安装依赖（Node + Python）
-RUN npm ci \
-  && npm ci --prefix frontend \
-  && cd backend && uv sync
+COPY backend ./backend
+COPY locales ./locales
+COPY static ./static
+COPY --from=frontend /build/frontend/dist ./frontend/dist
 
-# 复制项目源码
-COPY . .
+EXPOSE 3000
 
-EXPOSE 3000 5001
-
-# 同时启动前后端（开发模式）
-CMD ["npm", "run", "dev"]
+# Gunicorn serves both the API and the compiled frontend from one process.
+# Long simulations hold a request open, hence the generous timeout.
+CMD ["/app/backend/.venv/bin/gunicorn", \
+     "--chdir", "/app/backend", \
+     "--bind", "0.0.0.0:3000", \
+     "--workers", "2", \
+     "--threads", "4", \
+     "--timeout", "1800", \
+     "--access-logfile", "-", \
+     "wsgi:app"]
