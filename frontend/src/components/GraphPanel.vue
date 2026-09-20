@@ -52,7 +52,7 @@
         <div v-if="selectedItem" class="detail-panel">
           <div class="detail-panel-header">
             <span class="detail-title">{{ selectedItem.type === 'node' ? 'Node Details' : 'Relationship' }}</span>
-            <span v-if="selectedItem.type === 'node'" class="detail-type-badge" :style="{ background: selectedItem.color, color: 'var(--bg-2)' }">
+            <span v-if="selectedItem.type === 'node'" class="detail-type-badge" :style="{ background: selectedItem.color, color: 'var(--text-100)' }">
               {{ selectedItem.entityType }}
             </span>
             <button class="detail-close" @click="closeDetailPanel">×</button>

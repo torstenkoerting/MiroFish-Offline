@@ -762,7 +762,7 @@ onUnmounted(() => {
   transform: translateX(-50%);
   margin-top: 8px;
   padding: 10px 14px;
-  background: var(--text-100);
+  background: var(--bg-0);
   color: var(--text-100);
   border-radius: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -888,7 +888,7 @@ onUnmounted(() => {
 }
 
 .action-btn.primary {
-  background: var(--text-100);
+  background: var(--bg-0);
   color: var(--text-100);
 }
 
@@ -1004,8 +1004,8 @@ onUnmounted(() => {
   border-radius: 50%;
 }
 
-.timeline-item.twitter .marker-dot { background: var(--text-100); }
-.timeline-item.reddit .marker-dot { background: var(--text-100); }
+.timeline-item.twitter .marker-dot { background: var(--bg-0); }
+.timeline-item.reddit .marker-dot { background: var(--bg-0); }
 .timeline-item.twitter .timeline-marker { border-color: var(--text-100); }
 .timeline-item.reddit .timeline-marker { border-color: var(--text-100); }
 
@@ -1065,7 +1065,7 @@ onUnmounted(() => {
 .avatar-placeholder {
   width: 24px;
   height: 24px;
-  background: var(--text-100);
+  background: var(--bg-0);
   color: var(--text-100);
   border-radius: 50%;
   display: flex;
@@ -1212,7 +1212,7 @@ onUnmounted(() => {
 
 /* Logs */
 .system-logs {
-  background: var(--text-100);
+  background: var(--bg-0);
   color: var(--border-strong);
   padding: 16px;
   font-family: 'Roboto Mono', monospace;

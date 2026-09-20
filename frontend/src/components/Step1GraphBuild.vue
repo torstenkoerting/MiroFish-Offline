@@ -447,7 +447,7 @@ watch(() => props.systemLogs.length, () => {
     font-size: 9px;
     font-weight: 700;
     color: var(--text-100);
-    background: var(--text-100);
+    background: var(--bg-0);
     padding: 2px 6px;
     border-radius: 2px;
     text-transform: uppercase;
@@ -601,7 +601,7 @@ watch(() => props.systemLogs.length, () => {
 /* Step 03 Button */
 .action-btn {
   width: 100%;
-  background: var(--text-100);
+  background: var(--bg-0);
   color: var(--text-100);
   border: none;
   padding: 14px;
@@ -643,7 +643,7 @@ watch(() => props.systemLogs.length, () => {
 
 /* System Logs */
 .system-logs {
-  background: var(--text-100);
+  background: var(--bg-0);
   color: var(--border-strong);
   padding: 16px;
   font-family: 'Roboto Mono', monospace;

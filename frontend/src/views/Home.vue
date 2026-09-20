@@ -167,10 +167,10 @@ const s = reactive({
       'radial-gradient(50rem 36rem at 95% 8%, rgba(230,0,126,.09), transparent 60%),' +
       'var(--bg-1)',
   },
-  navbar: { height: '60px', background: 'var(--text-100)', color: 'var(--bg-2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 40px' },
+  navbar: { height: '60px', background: 'var(--bg-0)', color: 'var(--text-100)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 40px' },
   navBrand: { fontFamily: mono, fontWeight: '800', letterSpacing: '1px', fontSize: '1.2rem' },
   navLinks: { display: 'flex', alignItems: 'center' },
-  githubLink: { color: 'var(--bg-2)', textDecoration: 'none', fontFamily: mono, fontSize: '0.9rem', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '8px' },
+  githubLink: { color: 'var(--text-100)', textDecoration: 'none', fontFamily: mono, fontSize: '0.9rem', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '8px' },
   mainContent: { maxWidth: '1400px', margin: '0 auto', padding: '60px 40px' },
   heroSection: { display: 'flex', justifyContent: 'space-between', marginBottom: '80px', position: 'relative' },
   heroLeft: { flex: '1', paddingRight: '60px' },

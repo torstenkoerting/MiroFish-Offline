@@ -1198,7 +1198,7 @@ onUnmounted(() => {
 }
 
 .action-btn.primary {
-  background: var(--text-100);
+  background: var(--bg-0);
   color: var(--text-100);
 }
 
@@ -2053,7 +2053,7 @@ onUnmounted(() => {
 
 /* System Logs */
 .system-logs {
-  background: var(--text-100);
+  background: var(--bg-0);
   color: var(--border-strong);
   padding: 16px;
   font-family: 'Roboto Mono', monospace;
@@ -2358,7 +2358,7 @@ onUnmounted(() => {
 }
 
 .switch-control input:checked + .switch-track {
-  background: var(--text-100);
+  background: var(--bg-0);
 }
 
 .switch-control input:checked + .switch-track::after {

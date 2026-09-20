@@ -1107,7 +1107,7 @@ onUnmounted(() => {
   justify-content: space-between;
   padding: 0 24px;
   height: 56px;
-  background: var(--text-100);
+  background: var(--bg-0);
   color: var(--text-100);
   z-index: 10;
   position: relative;
@@ -1684,7 +1684,7 @@ onUnmounted(() => {
 }
 
 .right-panel .panel-header.dark-header {
-  background: var(--text-100);
+  background: var(--bg-0);
   color: var(--text-100);
   border-bottom: none;
 }
@@ -1952,7 +1952,7 @@ onUnmounted(() => {
   justify-content: center;
   gap: 10px;
   padding: 16px;
-  background: var(--text-100);
+  background: var(--bg-0);
   color: var(--text-100);
   border: none;
   font-size: 1rem;

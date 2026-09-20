@@ -32,7 +32,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--text-100);
+  background: var(--bg-0);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -54,7 +54,7 @@ button {
 
 .navbar {
   height: 60px;
-  background: var(--text-100);
+  background: var(--bg-0);
   color: var(--text-100);
   display: flex;
   justify-content: space-between;
@@ -533,7 +533,7 @@ button {
 
 .start-engine-btn {
   width: 100%;
-  background: var(--text-100);
+  background: var(--bg-0);
   color: var(--text-100);
   border: none;
   padding: 20px;
@@ -551,7 +551,7 @@ button {
 }
 
 .start-engine-btn:not(:disabled) {
-  background: var(--text-100);
+  background: var(--bg-0);
   border: 1px solid var(--text-100);
   animation: pulse-border 2s infinite;
 }
