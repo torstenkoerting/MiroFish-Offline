@@ -15,11 +15,11 @@
 }
 
 #app {
-  font-family: 'JetBrains Mono', 'Space Grotesk', 'Noto Sans SC', monospace;
+  font-family: 'Roboto Mono', 'Effra', 'Noto Sans SC', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #000000;
-  background-color: #ffffff;
+  color: var(--text-100);
+  background-color: var(--text-100);
 }
 
 ::-webkit-scrollbar {
@@ -32,11 +32,11 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #000000;
+  background: var(--text-100);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #333333;
+  background: var(--text-200);
 }
 
 button {
@@ -47,15 +47,15 @@ button {
 
 .home-container {
   min-height: 100vh;
-  background: #FFFFFF;
-  font-family: 'Space Grotesk', 'Noto Sans SC', system-ui, sans-serif;
-  color: #000000;
+  background: var(--bg-2);
+  font-family: 'Effra', 'Noto Sans SC', system-ui, sans-serif;
+  color: var(--text-100);
 }
 
 .navbar {
   height: 60px;
-  background: #000000;
-  color: #FFFFFF;
+  background: var(--text-100);
+  color: var(--text-100);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -63,7 +63,7 @@ button {
 }
 
 .nav-brand {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-weight: 800;
   letter-spacing: 1px;
   font-size: 1.2rem;
@@ -75,9 +75,9 @@ button {
 }
 
 .github-link {
-  color: #FFFFFF;
+  color: var(--text-100);
   text-decoration: none;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.9rem;
   font-weight: 500;
   display: flex;
@@ -117,13 +117,13 @@ button {
   align-items: center;
   gap: 15px;
   margin-bottom: 25px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.8rem;
 }
 
 .orange-tag {
-  background: #FF4500;
-  color: #FFFFFF;
+  background: var(--lime);
+  color: var(--bg-0);
   padding: 4px 10px;
   font-weight: 700;
   letter-spacing: 1px;
@@ -131,7 +131,7 @@ button {
 }
 
 .version-text {
-  color: #999;
+  color: var(--text-400);
   font-weight: 500;
   letter-spacing: 0.5px;
 }
@@ -142,11 +142,11 @@ button {
   font-weight: 500;
   margin: 0 0 40px 0;
   letter-spacing: -2px;
-  color: #000000;
+  color: var(--text-100);
 }
 
 .gradient-text {
-  background: linear-gradient(90deg, #000000 0%, #444444 100%);
+  background: linear-gradient(90deg, var(--text-100) 0%, var(--text-200) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
@@ -155,7 +155,7 @@ button {
 .hero-desc {
   font-size: 1.05rem;
   line-height: 1.8;
-  color: #666666;
+  color: var(--text-300);
   max-width: 640px;
   margin-bottom: 50px;
   font-weight: 400;
@@ -167,38 +167,38 @@ button {
 }
 
 .highlight-bold {
-  color: #000000;
+  color: var(--text-100);
   font-weight: 700;
 }
 
 .highlight-orange {
-  color: #FF4500;
+  color: var(--lime);
   font-weight: 700;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
 }
 
 .highlight-code {
   background: rgba(0, 0, 0, 0.05);
   padding: 2px 6px;
   border-radius: 2px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.9em;
-  color: #000000;
-  font-weight: 600;
+  color: var(--text-100);
+  font-weight: 700;
 }
 
 .slogan-text {
   font-size: 1.2rem;
-  font-weight: 520;
-  color: #000000;
+  font-weight: 500;
+  color: var(--text-100);
   letter-spacing: 1px;
-  border-left: 3px solid #FF4500;
+  border-left: 3px solid var(--lime);
   padding-left: 15px;
   margin-top: 20px;
 }
 
 .blinking-cursor {
-  color: #FF4500;
+  color: var(--lime);
   animation: blink 1s step-end infinite;
   font-weight: 700;
 }
@@ -211,7 +211,7 @@ button {
 .decoration-square {
   width: 16px;
   height: 16px;
-  background: #FF4500;
+  background: var(--lime);
 }
 
 .hero-right {
@@ -237,25 +237,25 @@ button {
 .scroll-down-btn {
   width: 40px;
   height: 40px;
-  border: 1px solid #E5E5E5;
+  border: 1px solid var(--border-soft);
   background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #FF4500;
+  color: var(--lime);
   font-size: 1.2rem;
   transition: all 0.2s;
 }
 
 .scroll-down-btn:hover {
-  border-color: #FF4500;
+  border-color: var(--lime);
 }
 
 .dashboard-section {
   display: flex;
   gap: 60px;
-  border-top: 1px solid #E5E5E5;
+  border-top: 1px solid var(--border-soft);
   padding-top: 60px;
   align-items: flex-start;
 }
@@ -271,9 +271,9 @@ button {
 }
 
 .panel-header {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.8rem;
-  color: #999;
+  color: var(--text-400);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -281,18 +281,18 @@ button {
 }
 
 .status-dot {
-  color: #FF4500;
+  color: var(--lime);
   font-size: 0.8rem;
 }
 
 .section-title {
   font-size: 2rem;
-  font-weight: 520;
+  font-weight: 500;
   margin: 0 0 15px 0;
 }
 
 .section-desc {
-  color: #666666;
+  color: var(--text-300);
   margin-bottom: 25px;
   line-height: 1.6;
 }
@@ -304,33 +304,33 @@ button {
 }
 
 .metric-card {
-  border: 1px solid #E5E5E5;
+  border: 1px solid var(--border-soft);
   padding: 20px 30px;
   min-width: 150px;
 }
 
 .metric-value {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 1.8rem;
-  font-weight: 520;
+  font-weight: 500;
   margin-bottom: 5px;
 }
 
 .metric-label {
   font-size: 0.85rem;
-  color: #999;
+  color: var(--text-400);
 }
 
 .steps-container {
-  border: 1px solid #E5E5E5;
+  border: 1px solid var(--border-soft);
   padding: 30px;
   position: relative;
 }
 
 .steps-header {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.8rem;
-  color: #999;
+  color: var(--text-400);
   margin-bottom: 25px;
   display: flex;
   align-items: center;
@@ -355,9 +355,9 @@ button {
 }
 
 .step-num {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-weight: 700;
-  color: #000000;
+  color: var(--text-100);
   opacity: 0.3;
 }
 
@@ -366,14 +366,14 @@ button {
 }
 
 .step-title {
-  font-weight: 520;
+  font-weight: 500;
   font-size: 1rem;
   margin-bottom: 4px;
 }
 
 .step-desc {
   font-size: 0.85rem;
-  color: #666666;
+  color: var(--text-300);
 }
 
 .right-panel {
@@ -381,7 +381,7 @@ button {
 }
 
 .console-box {
-  border: 1px solid #CCC;
+  border: 1px solid var(--border-strong);
   padding: 8px;
 }
 
@@ -397,13 +397,13 @@ button {
   display: flex;
   justify-content: space-between;
   margin-bottom: 15px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.75rem;
-  color: #666;
+  color: var(--text-300);
 }
 
 .upload-zone {
-  border: 1px dashed #CCC;
+  border: 1px dashed var(--border-strong);
   height: 200px;
   overflow-y: auto;
   display: flex;
@@ -411,7 +411,7 @@ button {
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s;
-  background: #FAFAFA;
+  background: var(--bg-2);
 }
 
 .upload-zone.has-files {
@@ -419,8 +419,8 @@ button {
 }
 
 .upload-zone:hover {
-  background: #F0F0F0;
-  border-color: #999;
+  background: var(--bg-3);
+  border-color: var(--text-400);
 }
 
 .upload-placeholder {
@@ -430,12 +430,12 @@ button {
 .upload-icon {
   width: 40px;
   height: 40px;
-  border: 1px solid #DDD;
+  border: 1px solid var(--border-strong);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 15px;
-  color: #999;
+  color: var(--text-400);
 }
 
 .upload-title {
@@ -445,9 +445,9 @@ button {
 }
 
 .upload-hint {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.75rem;
-  color: #999;
+  color: var(--text-400);
 }
 
 .file-list {
@@ -461,10 +461,10 @@ button {
 .file-item {
   display: flex;
   align-items: center;
-  background: #FFFFFF;
+  background: var(--bg-2);
   padding: 8px 12px;
-  border: 1px solid #EEE;
-  font-family: 'JetBrains Mono', monospace;
+  border: 1px solid var(--border-soft);
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.85rem;
 }
 
@@ -478,7 +478,7 @@ button {
   border: none;
   cursor: pointer;
   font-size: 1.2rem;
-  color: #999;
+  color: var(--text-400);
 }
 
 .console-divider {
@@ -492,21 +492,21 @@ button {
   content: '';
   flex: 1;
   height: 1px;
-  background: #EEE;
+  background: var(--border-soft);
 }
 
 .console-divider span {
   padding: 0 15px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.7rem;
-  color: #BBB;
+  color: var(--text-400);
   letter-spacing: 1px;
 }
 
 .input-wrapper {
   position: relative;
-  border: 1px solid #DDD;
-  background: #FAFAFA;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-2);
 }
 
 .code-input {
@@ -514,7 +514,7 @@ button {
   border: none;
   background: transparent;
   padding: 20px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.9rem;
   line-height: 1.6;
   resize: vertical;
@@ -526,18 +526,18 @@ button {
   position: absolute;
   bottom: 10px;
   right: 15px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.7rem;
-  color: #AAA;
+  color: var(--text-400);
 }
 
 .start-engine-btn {
   width: 100%;
-  background: #000000;
-  color: #FFFFFF;
+  background: var(--text-100);
+  color: var(--text-100);
   border: none;
   padding: 20px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-weight: 700;
   font-size: 1.1rem;
   display: flex;
@@ -551,14 +551,14 @@ button {
 }
 
 .start-engine-btn:not(:disabled) {
-  background: #000000;
-  border: 1px solid #000000;
+  background: var(--text-100);
+  border: 1px solid var(--text-100);
   animation: pulse-border 2s infinite;
 }
 
 .start-engine-btn:hover:not(:disabled) {
-  background: #FF4500;
-  border-color: #FF4500;
+  background: var(--lime);
+  border-color: var(--lime);
   transform: translateY(-2px);
 }
 
@@ -567,11 +567,11 @@ button {
 }
 
 .start-engine-btn:disabled {
-  background: #E5E5E5;
-  color: #999;
+  background: var(--border-soft);
+  color: var(--text-400);
   cursor: not-allowed;
   transform: none;
-  border: 1px solid #E5E5E5;
+  border: 1px solid var(--border-soft);
 }
 
 @keyframes pulse-border {

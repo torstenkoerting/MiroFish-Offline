@@ -1,0 +1,56 @@
+/* Koerting Institute base layer — dark stage, two electric accents.
+   Rules: 22-design-principles.md · Tokens: tokens.css (generated from 20-design-tokens.json) */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-1);
+  color: var(--text-200);
+  font-family: var(--font);
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app { min-height: 100vh; background: var(--bg-1); }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--text-100);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+a { color: var(--signal-text); text-decoration: none; }
+a:hover { color: var(--lime-bright); }
+
+::selection { background: rgba(230, 0, 126, .3); color: var(--text-100); }
+
+/* Scrollbars follow the dark stage instead of the OS default */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-1); }
+::-webkit-scrollbar-thumb { background: var(--bg-4); border-radius: var(--r-pill); }
+::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+
+/* The { } word mark - exactly one key word per product (22 §2.3).
+   Braces stay pink, the word carries the lime gradient. */
+.brace {
+  color: var(--pink);
+  font-weight: 500;
+  display: inline-block;
+  transform: translateY(-0.04em);
+}
+
+.brand-word {
+  background: linear-gradient(135deg, var(--lime) 0%, var(--lime-bright) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding: 0 4px;
+}

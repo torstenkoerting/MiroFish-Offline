@@ -1,0 +1,189 @@
+/* ============================================================
+   Koerting Institute — 21-tokens.css
+   GENERIERT aus 20-design-tokens.json (Single Source of Truth).
+   NICHT von Hand editieren — Änderungen zuerst in der JSON.
+
+   BEWUSSTE AUSNAHME: Der Block "document" der JSON (Word-CI,
+   22-design-principles.md §12 — box-lime-bg, box-pink-bg,
+   light-bg …) wird hier absichtlich NICHT gespiegelt. Diese
+   Werte gelten für Dokumente, nicht fürs Web. Wer JSON und CSS
+   maschinell vergleicht, muss "document" ausnehmen — sonst
+   meldet die Prüfung zwei Werte als fehlend, die nie hierher
+   gehörten.
+   Stand: 2026-08-21 · v1.7 (Verlaufs-Kommentar: nie in der
+   { }-Wortmarke — pro Wort eine Hervorhebung, 22 §2.3; zuvor
+   v1.6: Hintergrund-Treppe als mode-neutraler Konzeptname in
+   den Block-Kommentaren; v1.5: Light --text-400 .58→.62 —
+   AA-Fix, Design-Audit Business LAB)
+   · Regeln & Semantik: 22-design-principles.md
+   Bauteil-Semantik & Zustände: 24-component-patterns.md
+   ============================================================ */
+
+:root {
+  color-scheme: dark;   /* native Widgets (Scrollbars, Date-Picker) dunkel — Learning F8 */
+
+  /* ---- Brand (CI – unveränderlich) ---- */
+  --lime: #C4D600;
+  --lime-bright: #D4E630;
+  --lime-dark: #9DA346;
+  --pink: #E6007E;
+  --pink-bright: #FF2A99;
+  --pink-dark: #942F60;
+  --gold: #BC9C22;
+  --black: #000000;
+  --graphite: #191919;
+  --white: #FFFFFF;
+
+  /* ---- Hintergrund-Treppe: Dark-Werte (Default) ---- */
+  --bg-0: #070707;
+  --bg-1: #0E0E0E;
+  --bg-2: #141414;
+  --bg-3: #191919;
+  --bg-4: #232323;
+
+  /* ---- Text auf Dunkel ---- */
+  --text-100: #FFFFFF;
+  --text-200: rgba(255,255,255,.92);
+  --text-300: rgba(255,255,255,.72);
+  --text-400: rgba(255,255,255,.55);
+  --text-500: rgba(255,255,255,.40);
+  --text-600: rgba(255,255,255,.28);
+
+  /* ---- Rahmen ---- */
+  --border-subtle: rgba(255,255,255,.06);
+  --border-soft: rgba(255,255,255,.10);
+  --border-strong: rgba(255,255,255,.18);
+  --border-active: rgba(196,214,0,.40);
+
+  /* ---- Status (UI-Ampel, keine CI-Farben; Dark-kalibriert —
+     auf Hell nie als Text, siehe Akzent-Text-Aliase) ---- */
+  --status-green: #4ADE80;
+  --status-yellow: #FBBF24;
+  --status-red: #F87171;
+
+  /* ---- Akzent-Text-Aliase (22 §12 mechanisch) ----
+     Akzent-/statusfarbener TEXT nutzt diese Aliase, nie die Rohtöne —
+     sie kippen im Light-Mode mit (Lime/Ampel sind auf Hell kein Text). */
+  --signal-text: var(--lime);
+  --warn-text:   var(--status-yellow);
+  --alert-text:  var(--status-red);
+
+  /* ---- Verläufe ----
+     Lime→Pink NUR als --grad-headline für Schlüsselwörter in H1
+     (background-clip: text; sparsam, typisch 1–2 Wörter).
+     Sonst nirgends — nie Hintergrund, Flächen, Buttons, Borders,
+     und nie in der { }-Wortmarke (pro Wort eine Hervorhebung, 22 §2.3). */
+  --grad-headline: linear-gradient(135deg, var(--lime) 0%, var(--pink) 100%);
+  --grad-progress: linear-gradient(90deg, var(--pink) 0%, var(--pink-bright) 100%);
+  --grad-text: linear-gradient(135deg, #FFFFFF 0%, var(--lime) 50%, #FFFFFF 100%);
+
+  /* ---- Spacing-Skala (4er-Basis) ---- */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-2xl: 64px;
+
+  /* ---- Radius-Skala ---- */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 12px;
+  --r-lg: 20px;
+  --r-xl: 32px;
+  --r-pill: 999px;
+
+  /* ---- Schatten ---- */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.40);
+  --shadow-md: 0 8px 24px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.30);
+  --shadow-lg: 0 24px 60px -12px rgba(0,0,0,.65), 0 12px 28px -8px rgba(0,0,0,.45);
+
+  /* ---- Glow (Dark-Mode-Stilmittel) ---- */
+  --glow-lime: 0 0 24px rgba(196,214,0,.40);
+  --glow-pink: 0 0 24px rgba(230,0,126,.35);
+
+  /* ---- Typo ---- */
+  --font: 'Effra','DM Sans','Inter',system-ui,-apple-system,sans-serif;
+  --font-display: 'Effra','DM Sans','Inter',system-ui,sans-serif;
+  --mono: 'Roboto Mono','Consolas',ui-monospace,monospace;
+
+  /* ---- Font-Size-Skala (diskret) ---- */
+  --fs-xs: 12px;  --fs-sm: 14px;  --fs-md: 16px;  --fs-lg: 20px;
+  --fs-xl: 24px;  --fs-2xl: 32px; --fs-3xl: 40px;
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast: .15s;
+  --t: .25s;
+  --t-slow: .4s;
+
+  /* ---- KI-Denk-Indikator (Warten sichtbar machen — 22-design-principles.md §8.8) ---- */
+  --think-pulse:   1.15s;  /* Balken-Atmung (ein Loop) */
+  --think-stagger: .16s;   /* Versatz je Balken */
+  --think-cycle:   1.5s;   /* Wort-Wechsel-Takt */
+  --think-word-in: .3s;    /* Einblendung des neuen Worts */
+
+  /* ---- Layout ---- */
+  --container: 1200px;
+  --reading: 900px;
+}
+
+/* ============================================================
+   Light-Mode (CI-freigegeben 2026-07-15)
+   Überschreibt dieselben Variablennamen — Komponenten-Code
+   bleibt unverändert. Dark bleibt Marken-Default; Light per
+   Toggle: <html data-theme="light">.
+   Akzente auf Hell: farbiger Text nur --pink-dark / --graphite,
+   Lime nie als Text (DESIGN-PRINCIPLES §12).
+   ============================================================ */
+
+[data-theme="light"] {
+  color-scheme: light;   /* native Widgets hell */
+
+  /* ---- Hintergrund-Treppe: Light-Werte ---- */
+  --bg-0: #FFFFFF;
+  --bg-1: #F8F9F9;
+  --bg-2: #FFFFFF;
+  --bg-3: #F0F0F0;
+  --bg-4: #E8E8E8;
+
+  /* ---- Text auf Hell (aus Graphite) ---- */
+  --text-100: #191919;
+  --text-200: rgba(25,25,25,.92);
+  --text-300: rgba(25,25,25,.75);
+  --text-400: rgba(25,25,25,.62);
+  --text-500: rgba(25,25,25,.42);
+  --text-600: rgba(25,25,25,.30);
+
+  /* ---- Rahmen auf Hell ---- */
+  --border-subtle: rgba(0,0,0,.07);
+  --border-soft: rgba(0,0,0,.12);
+  --border-strong: rgba(0,0,0,.22);
+  --border-active: rgba(148,47,96,.45); /* Pink-dark-Fokus — Lime ist auf Hell unbrauchbar */
+
+  /* ---- Schatten auf Hell (weicher) ---- */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.08);
+  --shadow-md: 0 8px 24px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+  --shadow-lg: 0 24px 60px -12px rgba(0,0,0,.16), 0 12px 28px -8px rgba(0,0,0,.10);
+
+  /* ---- Glow aus — Schatten übernehmen die Tiefe ---- */
+  --glow-lime: none;
+  --glow-pink: none;
+
+  /* ---- Akzent-Text auf Hell: Pink-dark statt Lime; die Ampel-Töne
+     fallen als Text durch (Gelb 1,67:1, Rot 2,6:1) → warn/alert
+     neutral, Bedeutung tragen Icon/Text (22 §13). ---- */
+  --signal-text: var(--pink-dark);
+  --warn-text:   var(--text-200);
+  --alert-text:  var(--text-200);
+}
+
+/* Optional: System-Präferenz respektieren, solange kein
+   expliziter Toggle gesetzt ist. Aktivierung pro Produkt
+   bewusst entscheiden (Dark bleibt Marken-Default):
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) { ... Light-Werte wie oben ... }
+}
+*/

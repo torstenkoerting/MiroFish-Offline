@@ -1,0 +1,108 @@
+/* ============================================================
+   Koerting Institute — 26-fonts.css
+   Effra als selbst gehosteter Webfont (WOFF2, Ordner fonts/).
+   Drop-in: diese Datei + den Ordner fonts/ ins Projekt kopieren,
+   Pfade zeigen relativ auf fonts/ — bei anderer Ablage anpassen.
+
+   WARUM DIESE DATEI EXISTIERT (Befund 2026-08-07, EFFRA-WEBFONTS-
+   AUFGABE.md): Ohne @font-face sah nur, wer Effra installiert hat,
+   die Markenschrift — alle anderen system-ui. Zudem tragen die
+   Font-DATEIEN defekte Gewichts-Metadaten (Light/Medium/Heavy
+   melden sich alle als 400) — die font-weight-Angaben HIER sind
+   deshalb die verbindliche Wahrheit, sie gewinnen im Browser.
+
+   ZWEI REGELN:
+   1. NIE local('Effra') in die src-Listen aufnehmen — sonst greift
+      der Browser lokal installierte Dateien mit den defekten
+      Metadaten und rendert falsche Schnitte (der „zu fett"-Bug).
+   2. Es gibt KEIN SemiBold: Die Skala ist 300/400/500/700/800.
+      font-weight: 700 rendert als Bold 700 — nie verwenden.
+      Regel: 500 = Standard-Betonung (Labels, Buttons), 700 = stark
+      (Headlines). Details: 22-design-principles.md §4.1/§4.2.
+
+   WEITERGABE: In Projekte nur diese Datei + die WOFF2 kopieren.
+   Die fonts/README.md bleibt im Set — sie nennt interne Pfade und
+   gehört nie in ausgelieferte Ordner (z. B. public/ bei Next.js).
+
+   Stand: 2026-08-18 · v1.1 (Weitergabe-Regel; zuvor v1.0:
+   Erstfassung — 10 Schnitte, WOFF2 aus den lizenzierten
+   Dalton-Maag-TTFs, Webfont-Nutzung geklärt 2026-08-18)
+   ============================================================ */
+
+/* ---- Effra Upright ---- */
+@font-face {
+  font-family: 'Effra';
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/effra-light.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Effra';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/effra-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Effra';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/effra-medium.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Effra';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/effra-bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Effra';
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/effra-heavy.woff2') format('woff2');
+}
+
+/* ---- Effra Italic ---- */
+@font-face {
+  font-family: 'Effra';
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+  src: url('/fonts/effra-light-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Effra';
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  src: url('/fonts/effra-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Effra';
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+  src: url('/fonts/effra-medium-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Effra';
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  src: url('/fonts/effra-bold-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Effra';
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+  src: url('/fonts/effra-heavy-italic.woff2') format('woff2');
+}
+
+/* Der Font-Stack selbst bleibt unverändert in 21-tokens.css:
+   --font: 'Effra','DM Sans','Inter',system-ui,-apple-system,sans-serif;
+   Die Fallbacks greifen jetzt nur noch, solange die WOFF2 laden. */

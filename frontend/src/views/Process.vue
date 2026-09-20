@@ -178,15 +178,15 @@
           <div v-else-if="currentPhase < 1" class="graph-waiting">
             <div class="waiting-icon">
               <svg viewBox="0 0 100 100" class="network-icon">
-                <circle cx="50" cy="20" r="8" fill="none" stroke="#000" stroke-width="1.5"/>
-                <circle cx="20" cy="60" r="8" fill="none" stroke="#000" stroke-width="1.5"/>
-                <circle cx="80" cy="60" r="8" fill="none" stroke="#000" stroke-width="1.5"/>
-                <circle cx="50" cy="80" r="8" fill="none" stroke="#000" stroke-width="1.5"/>
-                <line x1="50" y1="28" x2="25" y2="54" stroke="#000" stroke-width="1"/>
-                <line x1="50" y1="28" x2="75" y2="54" stroke="#000" stroke-width="1"/>
-                <line x1="28" y1="60" x2="72" y2="60" stroke="#000" stroke-width="1" stroke-dasharray="4"/>
-                <line x1="50" y1="72" x2="26" y2="66" stroke="#000" stroke-width="1"/>
-                <line x1="50" y1="72" x2="74" y2="66" stroke="#000" stroke-width="1"/>
+                <circle cx="50" cy="20" r="8" fill="none" stroke="var(--text-100)" stroke-width="1.5"/>
+                <circle cx="20" cy="60" r="8" fill="none" stroke="var(--text-100)" stroke-width="1.5"/>
+                <circle cx="80" cy="60" r="8" fill="none" stroke="var(--text-100)" stroke-width="1.5"/>
+                <circle cx="50" cy="80" r="8" fill="none" stroke="var(--text-100)" stroke-width="1.5"/>
+                <line x1="50" y1="28" x2="25" y2="54" stroke="var(--text-100)" stroke-width="1"/>
+                <line x1="50" y1="28" x2="75" y2="54" stroke="var(--text-100)" stroke-width="1"/>
+                <line x1="28" y1="60" x2="72" y2="60" stroke="var(--text-100)" stroke-width="1" stroke-dasharray="4"/>
+                <line x1="50" y1="72" x2="26" y2="66" stroke="var(--text-100)" stroke-width="1"/>
+                <line x1="50" y1="72" x2="74" y2="66" stroke="var(--text-100)" stroke-width="1"/>
               </svg>
             </div>
             <p class="waiting-text">{{ $t('process.waitingOntology') }}</p>
@@ -462,7 +462,7 @@ const entityTypes = computed(() => {
   if (!graphData.value?.nodes) return []
   
   const typeMap = {}
-  const colors = ['#FF6B35', '#004E89', '#7B2D8E', '#1A936F', '#C5283D', '#E9724C']
+  const colors = ['var(--lime)', '#004E89', '#7B2D8E', 'var(--status-green)', '#C5283D', '#E9724C']
   
   graphData.value.nodes.forEach(node => {
     const type = node.labels?.find(l => l !== 'Entity') || 'Entity'
@@ -904,7 +904,7 @@ const renderGraph = () => {
       .attr('x', width / 2)
       .attr('y', height / 2)
       .attr('text-anchor', 'middle')
-      .attr('fill', '#999')
+      .attr('fill', 'var(--text-400)')
       .text('Waiting for graph data...')
     return
   }
@@ -944,7 +944,7 @@ const renderGraph = () => {
   const types = [...new Set(nodes.map(n => n.type))]
   const colorScale = d3.scaleOrdinal()
     .domain(types)
-    .range(['#FF6B35', '#004E89', '#7B2D8E', '#1A936F', '#C5283D', '#E9724C', '#2D3436', '#6C5CE7'])
+    .range(['var(--lime)', '#004E89', '#7B2D8E', 'var(--status-green)', '#C5283D', '#E9724C', '#2D3436', '#6C5CE7'])
 
   // Force-directed layout
   const simulation = d3.forceSimulation(nodes)
@@ -980,7 +980,7 @@ const renderGraph = () => {
 
   // Visible thin lines
   const link = linkGroup.append('line')
-    .attr('stroke', '#ccc')
+    .attr('stroke', 'var(--border-strong)')
     .attr('stroke-width', 1.5)
     .attr('stroke-opacity', 0.6)
 
@@ -997,7 +997,7 @@ const renderGraph = () => {
     .enter()
     .append('text')
     .attr('font-size', '9px')
-    .attr('fill', '#999')
+    .attr('fill', 'var(--text-400)')
     .attr('text-anchor', 'middle')
     .text(d => d.type.length > 15 ? d.type.substring(0, 12) + '...' : d.type)
 
@@ -1021,7 +1021,7 @@ const renderGraph = () => {
   node.append('circle')
     .attr('r', 10)
     .attr('fill', d => colorScale(d.type))
-    .attr('stroke', '#fff')
+    .attr('stroke', 'var(--bg-2)')
     .attr('stroke-width', 2)
     .attr('class', 'node-circle')
   
@@ -1030,8 +1030,8 @@ const renderGraph = () => {
     .attr('dy', 4)
     .text(d => d.name?.substring(0, 12) || '')
     .attr('font-size', '11px')
-    .attr('fill', '#333')
-    .attr('font-family', 'JetBrains Mono, monospace')
+    .attr('fill', 'var(--text-200)')
+    .attr('font-family', 'var(--mono)')
 
   // Close detail panel when clicking blank space
   svg.on('click', () => {
@@ -1096,7 +1096,7 @@ onUnmounted(() => {
 .process-page {
   min-height: 100vh;
   background: var(--white);
-  font-family: 'JetBrains Mono', 'Noto Sans SC', monospace;
+  font-family: 'Roboto Mono', 'Noto Sans SC', monospace;
   overflow: hidden; /* Prevent body scroll in fullscreen */
 }
 
@@ -1107,8 +1107,8 @@ onUnmounted(() => {
   justify-content: space-between;
   padding: 0 24px;
   height: 56px;
-  background: #000;
-  color: #fff;
+  background: var(--text-100);
+  color: var(--text-100);
   z-index: 10;
   position: relative;
 }
@@ -1135,11 +1135,11 @@ onUnmounted(() => {
 }
 
 .step-badge {
-  background: #FF6B35;
-  color: #fff;
+  background: var(--lime);
+  color: var(--bg-0);
   padding: 2px 8px;
   font-size: 0.7rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.05em;
   border-radius: 2px;
 }
@@ -1147,7 +1147,7 @@ onUnmounted(() => {
 .step-name {
   font-size: 0.85rem;
   letter-spacing: 0.05em;
-  color: #fff;
+  color: var(--text-100);
 }
 
 .nav-status {
@@ -1159,17 +1159,17 @@ onUnmounted(() => {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #666;
+  background: var(--text-300);
   margin-right: 8px;
 }
 
 .status-dot.processing {
-  background: #FF6B35;
+  background: var(--lime);
   animation: pulse 1.5s infinite;
 }
 
 .status-dot.completed {
-  background: #1A936F;
+  background: var(--status-green);
 }
 
 .status-dot.error {
@@ -1183,7 +1183,7 @@ onUnmounted(() => {
 
 .status-text {
   font-size: 0.75rem;
-  color: #999;
+  color: var(--text-400);
 }
 
 /* Main Content Area */
@@ -1199,9 +1199,9 @@ onUnmounted(() => {
   flex: none; /* Fixed width initially */
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #E0E0E0;
+  border-right: 1px solid var(--border-soft);
   transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  background: #fff;
+  background: var(--bg-2);
   z-index: 5;
 }
 
@@ -1215,8 +1215,8 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: 12px 24px;
-  border-bottom: 1px solid #E0E0E0;
-  background: #fff;
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--bg-2);
   height: 50px;
 }
 
@@ -1227,13 +1227,13 @@ onUnmounted(() => {
 }
 
 .header-deco {
-  color: #FF6B35;
+  color: var(--lime);
   font-size: 0.8rem;
 }
 
 .header-title {
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.05em;
 }
 
@@ -1242,7 +1242,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 16px;
   font-size: 0.75rem;
-  color: #666;
+  color: var(--text-300);
 }
 
 .stat-item {
@@ -1252,12 +1252,12 @@ onUnmounted(() => {
 }
 
 .stat-val {
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
+  color: var(--text-200);
 }
 
 .stat-divider {
-  color: #eee;
+  color: var(--border-soft);
 }
 
 .action-buttons {
@@ -1276,13 +1276,13 @@ onUnmounted(() => {
   border: 1px solid transparent;
   cursor: pointer;
   transition: all 0.2s;
-  color: #666;
+  color: var(--text-300);
   border-radius: 2px;
 }
 
 .action-btn:hover:not(:disabled) {
-  background: #F5F5F5;
-  color: #000;
+  background: var(--bg-3);
+  color: var(--text-100);
 }
 
 .action-btn:disabled {
@@ -1337,7 +1337,7 @@ onUnmounted(() => {
 .loading-ring:nth-child(1) {
   width: 80px;
   height: 80px;
-  border-top-color: #000;
+  border-top-color: var(--text-100);
 }
 
 .loading-ring:nth-child(2) {
@@ -1345,7 +1345,7 @@ onUnmounted(() => {
   height: 60px;
   top: 10px;
   left: 10px;
-  border-right-color: #FF6B35;
+  border-right-color: var(--lime);
   animation-delay: 0.2s;
 }
 
@@ -1354,7 +1354,7 @@ onUnmounted(() => {
   height: 40px;
   top: 20px;
   left: 20px;
-  border-bottom-color: #666;
+  border-bottom-color: var(--text-300);
   animation-delay: 0.4s;
 }
 
@@ -1365,13 +1365,13 @@ onUnmounted(() => {
 .loading-text,
 .waiting-text {
   font-size: 0.9rem;
-  color: #333;
+  color: var(--text-200);
   margin: 0 0 8px;
 }
 
 .waiting-hint {
   font-size: 0.8rem;
-  color: #999;
+  color: var(--text-400);
   margin: 0;
 }
 
@@ -1406,15 +1406,15 @@ onUnmounted(() => {
   gap: 8px;
   padding: 8px 16px;
   background: rgba(255, 107, 53, 0.1);
-  border: 1px solid #FF6B35;
+  border: 1px solid var(--lime);
   font-size: 0.8rem;
-  color: #FF6B35;
+  color: var(--lime);
 }
 
 .building-dot {
   width: 8px;
   height: 8px;
-  background: #FF6B35;
+  background: var(--lime);
   border-radius: 50%;
   animation: pulse 1s infinite;
 }
@@ -1426,8 +1426,8 @@ onUnmounted(() => {
   right: 16px;
   width: 320px;
   max-height: calc(100% - 32px);
-  background: #fff;
-  border: 1px solid #E0E0E0;
+  background: var(--bg-2);
+  border: 1px solid var(--border-soft);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   display: flex;
@@ -1440,20 +1440,20 @@ onUnmounted(() => {
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  background: #FAFAFA;
-  border-bottom: 1px solid #E0E0E0;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border-soft);
 }
 
 .detail-title {
   font-size: 0.9rem;
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
+  color: var(--text-200);
 }
 
 .detail-badge {
   padding: 2px 10px;
   font-size: 0.75rem;
-  color: #fff;
+  color: var(--text-100);
   border-radius: 2px;
 }
 
@@ -1467,13 +1467,13 @@ onUnmounted(() => {
   background: none;
   border: none;
   font-size: 1.2rem;
-  color: #999;
+  color: var(--text-400);
   cursor: pointer;
   transition: color 0.2s;
 }
 
 .detail-close:hover {
-  color: #333;
+  color: var(--text-200);
 }
 
 .detail-content {
@@ -1490,21 +1490,21 @@ onUnmounted(() => {
 
 .detail-label {
   font-size: 0.8rem;
-  color: #999;
+  color: var(--text-400);
   min-width: 70px;
   flex-shrink: 0;
 }
 
 .detail-value {
   font-size: 0.85rem;
-  color: #333;
+  color: var(--text-200);
   word-break: break-word;
 }
 
 .detail-value.uuid {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.75rem;
-  color: #666;
+  color: var(--text-300);
 }
 
 .detail-section {
@@ -1514,11 +1514,11 @@ onUnmounted(() => {
 .detail-summary {
   margin: 8px 0 0 0;
   font-size: 0.85rem;
-  color: #333;
+  color: var(--text-200);
   line-height: 1.6;
   padding: 10px;
-  background: #F9F9F9;
-  border-left: 3px solid #FF6B35;
+  background: var(--bg-2);
+  border-left: 3px solid var(--lime);
 }
 
 .detail-labels {
@@ -1530,9 +1530,9 @@ onUnmounted(() => {
 .label-tag {
   padding: 2px 8px;
   font-size: 0.75rem;
-  background: #F0F0F0;
-  border: 1px solid #E0E0E0;
-  color: #666;
+  background: var(--bg-3);
+  border: 1px solid var(--border-soft);
+  color: var(--text-300);
 }
 
 /* Edge Detail Relationship Display */
@@ -1543,48 +1543,48 @@ onUnmounted(() => {
   gap: 8px;
   margin-bottom: 16px;
   padding: 12px;
-  background: #F9F9F9;
-  border: 1px solid #E0E0E0;
+  background: var(--bg-2);
+  border: 1px solid var(--border-soft);
 }
 
 .edge-source,
 .edge-target {
   font-size: 0.85rem;
   font-weight: 500;
-  color: #333;
+  color: var(--text-200);
 }
 
 .edge-arrow {
-  color: #999;
+  color: var(--text-400);
 }
 
 .edge-type {
   padding: 2px 8px;
   font-size: 0.75rem;
-  background: #FF6B35;
-  color: #fff;
+  background: var(--lime);
+  color: var(--bg-0);
 }
 
 .detail-value.highlight {
-  font-weight: 600;
-  color: #000;
+  font-weight: 700;
+  color: var(--text-100);
 }
 
 .detail-subtitle {
   font-size: 0.9rem;
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
+  color: var(--text-200);
   margin: 16px 0 12px 0;
   padding-bottom: 8px;
-  border-bottom: 1px solid #E0E0E0;
+  border-bottom: 1px solid var(--border-soft);
 }
 
 /* Properties List */
 .properties-list {
   margin-top: 8px;
   padding: 10px;
-  background: #F9F9F9;
-  border: 1px solid #E0E0E0;
+  background: var(--bg-2);
+  border: 1px solid var(--border-soft);
 }
 
 .property-item {
@@ -1598,13 +1598,13 @@ onUnmounted(() => {
 }
 
 .property-key {
-  color: #666;
+  color: var(--text-300);
   margin-right: 8px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
 }
 
 .property-value {
-  color: #333;
+  color: var(--text-200);
   word-break: break-word;
 }
 
@@ -1620,10 +1620,10 @@ onUnmounted(() => {
   display: block;
   padding: 6px 10px;
   font-size: 0.75rem;
-  font-family: 'JetBrains Mono', monospace;
-  background: #F0F0F0;
-  border: 1px solid #E0E0E0;
-  color: #666;
+  font-family: 'Roboto Mono', monospace;
+  background: var(--bg-3);
+  border: 1px solid var(--border-soft);
+  color: var(--text-300);
   word-break: break-all;
 }
 
@@ -1639,8 +1639,8 @@ onUnmounted(() => {
   flex-wrap: wrap;
   gap: 16px;
   padding: 12px 24px;
-  border-top: 1px solid #E0E0E0;
-  background: #FAFAFA;
+  border-top: 1px solid var(--border-soft);
+  background: var(--bg-2);
 }
 
 .legend-item {
@@ -1657,11 +1657,11 @@ onUnmounted(() => {
 }
 
 .legend-label {
-  color: #333;
+  color: var(--text-200);
 }
 
 .legend-count {
-  color: #999;
+  color: var(--text-400);
 }
 
 /* Right Panel - 50% default */
@@ -1670,7 +1670,7 @@ onUnmounted(() => {
   flex: none;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: var(--bg-2);
   transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, transform 0.3s ease;
   overflow: hidden;
   opacity: 1;
@@ -1684,13 +1684,13 @@ onUnmounted(() => {
 }
 
 .right-panel .panel-header.dark-header {
-  background: #000;
-  color: #fff;
+  background: var(--text-100);
+  color: var(--text-100);
   border-bottom: none;
 }
 
 .right-panel .header-icon {
-  color: #FF6B35;
+  color: var(--lime);
   margin-right: 8px;
 }
 
@@ -1704,7 +1704,7 @@ onUnmounted(() => {
 /* Workflow Phases */
 .process-phase {
   margin-bottom: 24px;
-  border: 1px solid #E0E0E0;
+  border: 1px solid var(--border-soft);
   opacity: 0.5;
   transition: all 0.3s;
 }
@@ -1715,11 +1715,11 @@ onUnmounted(() => {
 }
 
 .process-phase.active {
-  border-color: #FF6B35;
+  border-color: var(--lime);
 }
 
 .process-phase.completed {
-  border-color: #1A936F;
+  border-color: var(--status-green);
 }
 
 .phase-header {
@@ -1727,8 +1727,8 @@ onUnmounted(() => {
   align-items: flex-start;
   gap: 16px;
   padding: 16px;
-  background: #FAFAFA;
-  border-bottom: 1px solid #E0E0E0;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border-soft);
 }
 
 .process-phase.active .phase-header {
@@ -1742,16 +1742,16 @@ onUnmounted(() => {
 .phase-num {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #ddd;
+  color: var(--border-strong);
   line-height: 1;
 }
 
 .process-phase.active .phase-num {
-  color: #FF6B35;
+  color: var(--lime);
 }
 
 .process-phase.completed .phase-num {
-  color: #1A936F;
+  color: var(--status-green);
 }
 
 .phase-info {
@@ -1760,31 +1760,31 @@ onUnmounted(() => {
 
 .phase-title {
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 4px;
 }
 
 .phase-api {
   font-size: 0.75rem;
-  color: #999;
-  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-400);
+  font-family: 'Roboto Mono', monospace;
 }
 
 .phase-status {
   font-size: 0.75rem;
   padding: 4px 10px;
-  background: #eee;
-  color: #666;
+  background: var(--border-soft);
+  color: var(--text-300);
 }
 
 .phase-status.active {
-  background: #FF6B35;
-  color: #fff;
+  background: var(--lime);
+  color: var(--bg-0);
 }
 
 .phase-status.completed {
-  background: #1A936F;
-  color: #fff;
+  background: var(--status-green);
+  color: var(--bg-0);
 }
 
 /* Phase Details */
@@ -1802,9 +1802,9 @@ onUnmounted(() => {
 .entity-tag {
   font-size: 0.75rem;
   padding: 4px 10px;
-  background: #F5F5F5;
-  border: 1px solid #E0E0E0;
-  color: #333;
+  background: var(--bg-3);
+  border: 1px solid var(--border-soft);
+  color: var(--text-200);
 }
 
 /* Relationship List */
@@ -1817,7 +1817,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 8px;
   padding: 6px 0;
-  border-bottom: 1px dashed #eee;
+  border-bottom: 1px dashed var(--border-soft);
 }
 
 .relation-item:last-child {
@@ -1826,21 +1826,21 @@ onUnmounted(() => {
 
 .rel-source,
 .rel-target {
-  color: #333;
+  color: var(--text-200);
 }
 
 .rel-arrow {
-  color: #ccc;
+  color: var(--border-strong);
 }
 
 .rel-name {
-  color: #FF6B35;
+  color: var(--lime);
   font-weight: 500;
 }
 
 .relation-more {
   padding-top: 8px;
-  color: #999;
+  color: var(--text-400);
   font-size: 0.75rem;
 }
 
@@ -1858,40 +1858,40 @@ onUnmounted(() => {
   width: 20px;
   height: 20px;
   border: 2px solid #FFE0D6;
-  border-top-color: #FF6B35;
+  border-top-color: var(--lime);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 
 .progress-text {
   font-size: 0.85rem;
-  color: #333;
+  color: var(--text-200);
 }
 
 /* Waiting State */
 .waiting-state {
   padding: 16px;
-  background: #F9F9F9;
-  border: 1px dashed #E0E0E0;
+  background: var(--bg-2);
+  border: 1px dashed var(--border-soft);
   text-align: center;
 }
 
 .waiting-hint {
   font-size: 0.85rem;
-  color: #999;
+  color: var(--text-400);
 }
 
 /* Progress Bar */
 .progress-bar {
   height: 6px;
-  background: #E0E0E0;
+  background: var(--border-soft);
   margin-bottom: 8px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: #FF6B35;
+  background: var(--lime);
   transition: width 0.3s;
 }
 
@@ -1902,12 +1902,12 @@ onUnmounted(() => {
 }
 
 .progress-message {
-  color: #666;
+  color: var(--text-300);
 }
 
 .progress-percent {
-  color: #FF6B35;
-  font-weight: 600;
+  color: var(--lime);
+  font-weight: 700;
 }
 
 /* Build Results */
@@ -1920,20 +1920,20 @@ onUnmounted(() => {
   flex: 1;
   text-align: center;
   padding: 12px;
-  background: #F5F5F5;
+  background: var(--bg-3);
 }
 
 .result-value {
   display: block;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #000;
+  color: var(--text-100);
   margin-bottom: 4px;
 }
 
 .result-label {
   font-size: 0.7rem;
-  color: #999;
+  color: var(--text-400);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -1942,7 +1942,7 @@ onUnmounted(() => {
 .next-step-section {
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid #E0E0E0;
+  border-top: 1px solid var(--border-soft);
 }
 
 .next-step-btn {
@@ -1952,8 +1952,8 @@ onUnmounted(() => {
   justify-content: center;
   gap: 10px;
   padding: 16px;
-  background: #000;
-  color: #fff;
+  background: var(--text-100);
+  color: var(--text-100);
   border: none;
   font-size: 1rem;
   font-weight: 500;
@@ -1963,11 +1963,11 @@ onUnmounted(() => {
 }
 
 .next-step-btn:hover:not(:disabled) {
-  background: #FF6B35;
+  background: var(--lime);
 }
 
 .next-step-btn:disabled {
-  background: #ccc;
+  background: var(--border-strong);
   cursor: not-allowed;
 }
 
@@ -1977,8 +1977,8 @@ onUnmounted(() => {
 
 /* Project Info Panel */
 .project-panel {
-  border-top: 1px solid #E0E0E0;
-  background: #FAFAFA;
+  border-top: 1px solid var(--border-soft);
+  background: var(--bg-2);
 }
 
 .project-header {
@@ -1986,16 +1986,16 @@ onUnmounted(() => {
   align-items: center;
   gap: 10px;
   padding: 12px 24px;
-  border-bottom: 1px solid #E0E0E0;
+  border-bottom: 1px solid var(--border-soft);
 }
 
 .project-icon {
-  color: #FF6B35;
+  color: var(--lime);
 }
 
 .project-title {
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .project-details {
@@ -2007,7 +2007,7 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: flex-start;
   padding: 8px 0;
-  border-bottom: 1px dashed #E0E0E0;
+  border-bottom: 1px dashed var(--border-soft);
   font-size: 0.8rem;
 }
 
@@ -2016,21 +2016,21 @@ onUnmounted(() => {
 }
 
 .item-label {
-  color: #999;
+  color: var(--text-400);
   flex-shrink: 0;
 }
 
 .item-value {
-  color: #333;
+  color: var(--text-200);
   text-align: right;
   max-width: 60%;
   word-break: break-all;
 }
 
 .item-value.code {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.75rem;
-  color: #666;
+  color: var(--text-300);
 }
 
 /* Responsive */
@@ -2042,7 +2042,7 @@ onUnmounted(() => {
   .left-panel {
     width: 100% !important;
     border-right: none;
-    border-bottom: 1px solid #E0E0E0;
+    border-bottom: 1px solid var(--border-soft);
     height: 50vh;
   }
   

@@ -23,12 +23,12 @@ const props = defineProps({
 const { locale } = useI18n()
 
 const style = {
-  fontFamily: 'JetBrains Mono, monospace',
+  fontFamily: 'var(--mono)',
   fontSize: '0.85rem',
   fontWeight: '500',
   background: 'transparent',
-  color: props.variant === 'dark' ? '#fff' : '#000',
-  border: `1px solid ${props.variant === 'dark' ? 'rgba(255,255,255,0.3)' : '#CCC'}`,
+  color: props.variant === 'dark' ? 'var(--bg-2)' : 'var(--text-100)',
+  border: `1px solid ${props.variant === 'dark' ? 'rgba(255,255,255,0.3)' : 'var(--border-strong)'}`,
   padding: '4px 8px',
   marginLeft: '20px',
   cursor: 'pointer',
