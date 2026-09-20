@@ -11,6 +11,8 @@ services:
     depends_on:
       neo4j:
         condition: service_healthy
+      ollama:
+        condition: service_started
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://localhost:5001/health || exit 1"]
       interval: 30s
@@ -39,7 +41,19 @@ services:
       retries: 10
       start_period: 30s
 
+  # Embeddings only. The chat model runs on Ollama Cloud, which has no
+  # /v1/embeddings endpoint - so nomic-embed-text has to live here.
+  # After the first deploy:  ollama pull nomic-embed-text  (~274 MB)
+  ollama:
+    image: ollama/ollama:latest
+    expose:
+      - "11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
 volumes:
   neo4j_data:
   neo4j_logs:
+  ollama_data:
   uploads:
