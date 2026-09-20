@@ -143,3 +143,37 @@ Wenn nichts konkretes ansteht — Ideen, was sich lohnt:
 - Export der Simulation-Reports als PDF/Docx im Koerting-CI
 - Login-Schutz vor die Live-App (Basic Auth oder Coolify-eigener Auth-Proxy)
 - Backup fuer Neo4j-Volume auf dem Server einrichten
+
+## Betrieb der Live-Instanz
+
+Die Live-Instanz laeuft als freies `docker compose` auf dem Server und wird von
+Coolifys Traefik ueber Container-Labels aufgegriffen — sie ist selbst *nicht*
+als Coolify-Resource angelegt.
+
+### Fallstrick: Container in zwei Netzwerken
+
+Haengt der Container sowohl im `coolify`-Netz als auch in seinem eigenen
+compose-Netz, waehlt Traefik ohne Hinweis eine der beiden IPs. Trifft es das
+compose-Netz, laeuft **jede Anfrage von aussen in einen Timeout**, obwohl der
+Container lokal sauber mit HTTP 200 antwortet — und der TLS-Handshake vorher
+gelingt, was den Fehler wie ein Zertifikats- oder DNS-Problem aussehen laesst.
+
+Das Label entscheidet:
+
+```yaml
+labels:
+  - "traefik.enable=true"
+  - "traefik.docker.network=coolify"   # ohne das: sporadische Timeouts nach jedem Rebuild
+```
+
+Zur Eingrenzung aus dem Proxy-Container heraus beide Container-IPs anfragen —
+antwortet nur eine, ist es dieser Fall.
+
+### Was ein Deploy mitnehmen muss
+
+`frontend/vite.config.js` wird als Read-Only-Volume gemountet und deshalb beim
+Synchronisieren leicht vergessen. Sie traegt `server.allowedHosts` (sonst blockt
+Vite die Domain mit 403) und `server.fs.allow` (sonst findet Vite das
+`locales/`-Verzeichnis ausserhalb von `frontend/` nicht).
+
+Konkrete Hostnamen, Pfade und Kommandos: siehe `OPERATIONS.local.md` (nicht im Repo).

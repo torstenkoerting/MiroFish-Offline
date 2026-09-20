@@ -61,3 +61,4 @@ data/backend/venv311/
 backend/venv311/
 .coolify-token
 .coolify-migration-env.txt
+OPERATIONS.local.md
