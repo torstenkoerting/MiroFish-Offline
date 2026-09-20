@@ -146,34 +146,43 @@ Wenn nichts konkretes ansteht — Ideen, was sich lohnt:
 
 ## Betrieb der Live-Instanz
 
-Die Live-Instanz laeuft als freies `docker compose` auf dem Server und wird von
-Coolifys Traefik ueber Container-Labels aufgegriffen — sie ist selbst *nicht*
-als Coolify-Resource angelegt.
+`simulation.koerting.ai` laeuft seit dem 21.09.2026 als **Coolify-Application**
+(Projekt "MiroFish", Build-Pack Docker Compose) und folgt `main` dieses Repos.
 
-### Fallstrick: Container in zwei Netzwerken
+### Deploy
 
-Haengt der Container sowohl im `coolify`-Netz als auch in seinem eigenen
-compose-Netz, waehlt Traefik ohne Hinweis eine der beiden IPs. Trifft es das
-compose-Netz, laeuft **jede Anfrage von aussen in einen Timeout**, obwohl der
-Container lokal sauber mit HTTP 200 antwortet — und der TLS-Handshake vorher
-gelingt, was den Fehler wie ein Zertifikats- oder DNS-Problem aussehen laesst.
+Ein Push auf `main` loest den Deploy aus — ein GitHub-Webhook meldet ihn an
+Coolify. Kein `rsync`, kein SSH mehr noetig. Im Coolify-Panel laesst sich der
+Deploy auch von Hand ausloesen.
 
-Das Label entscheidet:
+### Drei Stolpersteine, die beim Aufsetzen aufgefallen sind
 
-```yaml
-labels:
-  - "traefik.enable=true"
-  - "traefik.docker.network=coolify"   # ohne das: sporadische Timeouts nach jedem Rebuild
+**Ollama Cloud kann keine Embeddings.** Der Chat laeuft ueber `ollama.com`, aber
+dessen `/v1/embeddings` antwortet mit 404. `nomic-embed-text` muss deshalb in
+einem eigenen Ollama-Container laufen — der steckt in der Compose. Nach einem
+frischen Volume einmalig nachziehen:
+
+```bash
+docker exec <ollama-container> ollama pull nomic-embed-text
 ```
 
-Zur Eingrenzung aus dem Proxy-Container heraus beide Container-IPs anfragen —
-antwortet nur eine, ist es dieser Fall.
+**Neo4j startet nicht, wenn es die App-Variablen sieht.** Coolify reicht alle
+Environment-Variablen an *jeden* Service der Compose weiter. Das Neo4j-Image
+liest jede `NEO4J_*`-Variable als Konfigurationseintrag — aus `NEO4J_URI` wird
+das unbekannte Setting `URI`, der Container bricht ab und reisst die App als
+fehlgeschlagene Abhaengigkeit mit. Die Compose entschaerft das ueber
+`NEO4J_server_config_strict__validation_enabled=false`.
 
-### Was ein Deploy mitnehmen muss
+**Traefik und zwei Netzwerke.** Haengt ein Container sowohl im `coolify`-Netz als
+auch in einem eigenen Compose-Netz, waehlt Traefik ohne Hinweis eine der IPs.
+Trifft es die falsche, laeuft jede Anfrage von aussen in einen Timeout, obwohl
+der Container lokal mit 200 antwortet — und der TLS-Handshake vorher gelingt,
+was den Fehler wie ein Zertifikatsproblem aussehen laesst. Coolify setzt das
+noetige `traefik.docker.network`-Label selbst; bei handgebauten Compose-Setups
+muss es hinein.
 
-`frontend/vite.config.js` wird als Read-Only-Volume gemountet und deshalb beim
-Synchronisieren leicht vergessen. Sie traegt `server.allowedHosts` (sonst blockt
-Vite die Domain mit 403) und `server.fs.allow` (sonst findet Vite das
-`locales/`-Verzeichnis ausserhalb von `frontend/` nicht).
+### Vorgaenger
 
-Konkrete Hostnamen, Pfade und Kommandos: siehe `OPERATIONS.local.md` (nicht im Repo).
+Die frueher von Hand betriebene Instanz liegt archiviert unter
+`/opt/mirofish-archiv-<Zeitstempel>`, Datensicherungen unter `/opt/mirofish-backup/`.
+Hostnamen und Zugriffswege stehen in `OPERATIONS.local.md` (nicht im Repo).
