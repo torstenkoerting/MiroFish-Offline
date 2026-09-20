@@ -4,7 +4,6 @@
     <span :style="divider"></span>
     <span :style="product">
       <span class="brace">{</span><span class="brand-word">MiroFish</span><span class="brace">}</span>
-      <span :style="suffix">Offline</span>
     </span>
   </div>
 </template>
@@ -28,5 +27,4 @@ const product = {
   gap: '6px',
   whiteSpace: 'nowrap',
 }
-const suffix = { color: 'var(--text-400)', fontWeight: '500', fontSize: 'var(--fs-sm)', letterSpacing: '0.1em', textTransform: 'uppercase' }
 </script>
